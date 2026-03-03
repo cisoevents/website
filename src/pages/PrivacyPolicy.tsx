@@ -96,9 +96,6 @@ export default function PrivacyPolicy() {
               <ShieldCheck size={24} style={{ color: 'var(--color-accent)' }} />
             </div>
             <div>
-              <p className="font-semibold text-sm uppercase tracking-widest" style={{ color: 'var(--color-accent)' }}>
-                Legal
-              </p>
               <h1 className="text-3xl md:text-4xl font-extrabold" style={{ color: 'var(--color-heading)' }}>
                 Privacy Policy
               </h1>
