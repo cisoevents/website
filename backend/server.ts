@@ -9,6 +9,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM              = 'CISOevents <charlesp@cisoevents.com>';
 const ADMIN_EMAIL       = 'charlesp@cisoevents.com';
 const SITE_URL          = 'https://cisoevents.com';
+const LOGO_URL          = 'https://cisoevents-prototype.vercel.app/CISOevents-Logo-R2.png';
 const LUMA_URL          = 'https://lu.ma/cisoevents';
 const LUMA_CALENDAR_SLUG = process.env.LUMA_CALENDAR_SLUG ?? 'cisoevents';
 const LUMA_API_KEY      = process.env.LUMA_API_KEY ?? '';        // Free — get from your Luma dashboard → Settings → API
@@ -170,8 +171,15 @@ function header(): string {
       <table style="border-collapse:collapse;width:100%;">
         <tr>
           <td>
-            <span style="font-family:Georgia,serif;font-size:26px;font-weight:700;color:#00A8FF;letter-spacing:1px;">CISO</span><span style="font-family:Georgia,serif;font-size:26px;font-weight:300;color:#ffffff;letter-spacing:1px;">events</span>
-            <div style="margin-top:6px;height:2px;width:56px;background:linear-gradient(90deg,#00A8FF 0%,#0055AA 100%);border-radius:2px;"></div>
+            <a href="${SITE_URL}" style="display:inline-block;text-decoration:none;">
+              <img
+                src="${LOGO_URL}"
+                alt="CISOevents"
+                width="160"
+                style="display:block;height:auto;border:0;max-width:160px;"
+              />
+            </a>
+            <div style="margin-top:10px;height:2px;width:56px;background:linear-gradient(90deg,#00A8FF 0%,#0055AA 100%);border-radius:2px;"></div>
           </td>
         </tr>
       </table>
