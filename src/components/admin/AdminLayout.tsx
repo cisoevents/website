@@ -1,10 +1,15 @@
-import { useState } from 'react';
+import { useState, ReactNode } from 'react';
 import { NavLink, useNavigate, Link } from 'react-router-dom';
 import {
   LayoutDashboard, Calendar, Users, List, Mic, Award,
   LogOut, Shield, Menu, X, ChevronRight, ExternalLink
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+
+interface AdminLayoutProps {
+  children: ReactNode;
+  breadcrumb?: string;
+}
 
 const navItems = [
   { label: 'Dashboard', to: '/admin/dashboard', Icon: LayoutDashboard },
@@ -15,7 +20,7 @@ const navItems = [
   { label: 'Sponsors', to: '/admin/sponsors', Icon: Award },
 ];
 
-export default function AdminLayout({ children, breadcrumb }) {
+export default function AdminLayout({ children, breadcrumb }: AdminLayoutProps) {
   const { adminUser, logout } = useApp();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);

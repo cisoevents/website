@@ -1,6 +1,12 @@
 import { X, Linkedin, Building2, Briefcase } from 'lucide-react';
+import type { Speaker } from '../types';
 
-export default function SpeakerModal({ speaker, onClose }) {
+interface SpeakerModalProps {
+  speaker: Speaker | null;
+  onClose: () => void;
+}
+
+export default function SpeakerModal({ speaker, onClose }: SpeakerModalProps) {
   if (!speaker) return null;
 
   return (

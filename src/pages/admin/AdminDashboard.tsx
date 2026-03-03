@@ -1,10 +1,18 @@
 import { Link } from 'react-router-dom';
-import { Calendar, Users, Mic, Award, TrendingUp, ArrowRight } from 'lucide-react';
+import { Calendar, Users, Mic, Award, TrendingUp, ArrowRight, type LucideIcon } from 'lucide-react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { useApp } from '../../context/AppContext';
 import { speakers, podcasts, sponsors } from '../../data/mockData';
 
-function StatCard({ label, value, icon: Icon, color, to }) {
+interface StatCardProps {
+  label: string;
+  value: number | string;
+  icon: LucideIcon;
+  color: string;
+  to: string;
+}
+
+function StatCard({ label, value, icon: Icon, color, to }: StatCardProps) {
   return (
     <Link to={to} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-0.5 transition-all group">
       <div className="flex items-center justify-between mb-4">

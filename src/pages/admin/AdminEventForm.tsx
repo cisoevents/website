@@ -1,23 +1,29 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ReactNode } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Save, ArrowLeft, Upload } from 'lucide-react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { useApp } from '../../context/AppContext';
 
-const EMPTY = {
+type FormState = {
+  title: string; year: string; startDate: string; endDate: string;
+  location: string; description: string; image: string; status: string;
+  attendees: string; tags: string;
+};
+
+const EMPTY: FormState = {
   title: '', year: '2026', startDate: '', endDate: '',
   location: '', description: '', image: '', status: 'draft',
   attendees: '', tags: '',
 };
 
 export default function AdminEventForm() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const { events, addEvent, updateEvent } = useApp();
   const navigate = useNavigate();
   const isEdit = Boolean(id);
 
-  const [form, setForm] = useState(EMPTY);
-  const [errors, setErrors] = useState({});
+  const [form, setForm] = useState<FormState>(EMPTY);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -41,7 +47,7 @@ export default function AdminEventForm() {
     return errs;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length) { setErrors(errs); return; }
@@ -59,9 +65,9 @@ export default function AdminEventForm() {
     }, 500);
   };
 
-  const field = (key, val) => setForm(p => ({ ...p, [key]: val }));
+  const field = (key: keyof FormState, val: string) => setForm(p => ({ ...p, [key]: val }));
 
-  const F = ({ label, name, children, required }) => (
+  const F = ({ label, name, children, required }: { label: string; name: string; children: ReactNode; required?: boolean }) => (
     <div>
       <label className="form-label">{label}{required && <span className="text-red-500 ml-0.5">*</span>}</label>
       {children}

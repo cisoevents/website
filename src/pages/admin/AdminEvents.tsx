@@ -3,8 +3,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Plus, Pencil, Trash2, Calendar, Search, AlertTriangle } from 'lucide-react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { useApp } from '../../context/AppContext';
+import type { CisoEvent } from '../../types';
 
-function DeleteModal({ event, onConfirm, onCancel }) {
+interface DeleteModalProps {
+  event: CisoEvent;
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
+function DeleteModal({ event, onConfirm, onCancel }: DeleteModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
       <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6">
@@ -33,7 +40,7 @@ export default function AdminEvents() {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState<CisoEvent | null>(null);
 
   const filtered = events.filter(ev => {
     const matchStatus = statusFilter === 'all' || ev.status === statusFilter;
@@ -43,7 +50,7 @@ export default function AdminEvents() {
   });
 
   const handleDelete = () => {
-    deleteEvent(deleteTarget.id);
+    if (deleteTarget) deleteEvent(deleteTarget.id);
     setDeleteTarget(null);
   };
 

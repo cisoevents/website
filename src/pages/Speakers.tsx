@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { Search, Linkedin, ChevronRight } from 'lucide-react';
 import { speakers } from '../data/mockData';
 import SpeakerModal from '../components/SpeakerModal';
+import type { Speaker } from '../types';
 
 export default function Speakers() {
   const [search, setSearch] = useState('');
   const [trackFilter, setTrackFilter] = useState('all');
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState<Speaker | null>(null);
 
   const tracks = ['all', 'AI', 'Cyber', 'Startup'];
 
@@ -79,7 +80,7 @@ export default function Speakers() {
               <div
                 key={sp.id}
                 className="card p-6 text-center group cursor-pointer"
-                onClick={() => setSelected(sp)}
+                onClick={() => setSelected(sp as Speaker)}
               >
                 <div className="relative mx-auto mb-4 w-24 h-24">
                   <img

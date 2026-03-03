@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AppProvider, useApp } from './context/AppContext';
 
@@ -5,14 +6,15 @@ import { AppProvider, useApp } from './context/AppContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Toast from './components/Toast';
-import ThemeSwitcher from './components/ThemeSwitcher';
 
 // Public pages
 import Home from './pages/Home';
 import Events from './pages/Events';
-import Agenda from './pages/Agenda';
 import Speakers from './pages/Speakers';
-import Podcasts from './pages/Podcasts';
+import Gallery from './pages/Gallery';
+import About from './pages/About';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import FAQ from './pages/FAQ';
 
 // Admin pages
 import AdminLogin from './pages/admin/AdminLogin';
@@ -44,15 +46,30 @@ function RequireAuth({ children }) {
   return children;
 }
 
+function LumaInit() {
+  const location = useLocation();
+  useEffect(() => {
+    // Re-initialize Luma checkout buttons after every React navigation
+    if (window.luma) {
+      window.luma.initCheckout();
+    }
+  }, [location.pathname]);
+  return null;
+}
+
 function AppRoutes() {
   return (
-    <Routes>
+    <>
+      <LumaInit />
+      <Routes>
       {/* Public */}
       <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
       <Route path="/events" element={<PublicLayout><Events /></PublicLayout>} />
-      <Route path="/agenda" element={<PublicLayout><Agenda /></PublicLayout>} />
       <Route path="/speakers" element={<PublicLayout><Speakers /></PublicLayout>} />
-      <Route path="/podcasts" element={<PublicLayout><Podcasts /></PublicLayout>} />
+      <Route path="/gallery" element={<PublicLayout><Gallery /></PublicLayout>} />
+      <Route path="/about" element={<PublicLayout><About /></PublicLayout>} />
+      <Route path="/privacy" element={<PublicLayout><PrivacyPolicy /></PublicLayout>} />
+      <Route path="/faq" element={<PublicLayout><FAQ /></PublicLayout>} />
 
       {/* Admin */}
       <Route path="/admin" element={<AdminLogin />} />
@@ -68,6 +85,7 @@ function AppRoutes() {
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </>
   );
 }
 
@@ -75,7 +93,6 @@ export default function App() {
   return (
     <BrowserRouter>
       <AppProvider>
-        <ThemeSwitcher />
         <AppRoutes />
         <Toast />
       </AppProvider>
