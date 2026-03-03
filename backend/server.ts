@@ -150,6 +150,7 @@ app.use(cors({
     'http://localhost:4175',
     'https://cisoevents.com',
     'https://www.cisoevents.com',
+    'https://cisoevents-prototype.vercel.app'
   ],
 }));
 app.use(express.json());
