@@ -24,8 +24,8 @@ function AddToCalendar() {
   const [open, setOpen] = useState(false);
 
   const title = 'CISOevents 2026';
-  const description = 'The premier cybersecurity and AI leadership summit — 500+ security executives, Toronto.';
-  const location = 'Metro Toronto Convention Centre, Toronto, Canada';
+  const description = 'The premier cybersecurity and AI leadership summit — 500+ security executives, San Francisco, CA.';
+  const location = 'San Francisco, CA';
   const start = '20260828T090000Z';
   const end   = '20260829T180000Z';
 
@@ -163,7 +163,7 @@ function Hero() {
             <span>March 23, 2026</span>
             <span className="mx-2" style={{ color: 'var(--color-border)' }}>|</span>
             <MapPin size={17} style={{ color: 'var(--color-accent)' }} />
-            <span>Toronto, Canada</span>
+            <span>San Francisco, CA</span>
           </div>
 
           <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 items-start sm:items-center">
