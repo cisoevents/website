@@ -5,7 +5,7 @@ import heroVideo from '../assets/BG_HERO_2_SUMMIT_2.mp4';
 import {
   Calendar, MapPin, Users, Mic, Award, ChevronRight,
   Play, ArrowRight, Star, Shield, CalendarPlus, Send,
-  Phone, Mail, ExternalLink,
+  Phone, Mail, ExternalLink, X,
 } from 'lucide-react';
 import { podcasts, stats } from '../data/mockData';
 
@@ -629,6 +629,7 @@ function ContactSection() {
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
+  const [calendlyOpen, setCalendlyOpen] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -668,15 +669,16 @@ function ContactSection() {
             </p>
 
             {/* Calendly — Book a Call */}
-            <a
-              href="https://calendly.com/cisoevents"
+            <button
+              type="button"
+              onClick={() => setCalendlyOpen(true)}
               className="inline-flex items-center gap-2 font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg mb-8"
               style={{ backgroundColor: 'var(--color-accent)', color: '#fff' }}
               onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--color-accent-hover)')}
               onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'var(--color-accent)')}
             >
               <Calendar size={18} /> Book a Call
-            </a>
+            </button>
 
             <div className="space-y-6">
               <div className="flex items-center gap-4">
@@ -797,6 +799,54 @@ function ContactSection() {
 
         </div>
       </div>
+
+      {calendlyOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ backgroundColor: 'rgba(0,0,0,0.7)' }}
+          onClick={e => {
+            if (e.target === e.currentTarget) setCalendlyOpen(false);
+          }}
+        >
+          <div
+            className="w-full max-w-4xl rounded-2xl overflow-hidden"
+            style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Book a call"
+          >
+            <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: 'var(--color-border)' }}>
+              <h3 className="font-semibold" style={{ color: 'var(--color-heading)' }}>Book a Call</h3>
+              <button
+                type="button"
+                onClick={() => setCalendlyOpen(false)}
+                className="p-1.5 rounded-md transition-colors"
+                style={{ color: 'var(--color-text-muted)' }}
+                aria-label="Close dialog"
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <div className="h-[75vh] min-h-[500px]">
+              <iframe
+                src="https://calendly.com/cisoevents?hide_gdpr_banner=1"
+                title="Calendly Booking"
+                className="w-full h-full border-0"
+              />
+            </div>
+            <div className="px-4 py-3 border-t flex justify-end" style={{ borderColor: 'var(--color-border)' }}>
+              <button
+                type="button"
+                onClick={() => setCalendlyOpen(false)}
+                className="px-4 py-2 rounded-lg text-sm font-medium"
+                style={{ backgroundColor: 'var(--color-dark-bg)', color: 'var(--color-text)' }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
