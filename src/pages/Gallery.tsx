@@ -14,7 +14,7 @@ interface YouTubeVideo {
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const VIDEOS_PER_PAGE = 8;
-const API_BASE = (import.meta.env.VITE_API_URL as string | undefined)?.trim() || 'https://cisoevents-prototype-backend.vercel.app';
+const API_BASE = (import.meta.env.VITE_API_URL as string | undefined)?.trim() || 'https://backend-website-mu.vercel.app';
 
 // ── YouTube Videos hook ───────────────────────────────────────────────────────
 function useYouTubeVideos() {

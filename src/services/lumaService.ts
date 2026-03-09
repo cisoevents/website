@@ -8,7 +8,7 @@
  * automatically move to "past" once their end time passes.
  */
 
-const API_BASE = (import.meta.env.VITE_API_URL as string | undefined)?.trim() || 'https://cisoevents-prototype-backend.vercel.app';
+const API_BASE = (import.meta.env.VITE_API_URL as string | undefined)?.trim() || 'https://backend-website-mu.vercel.app';
 
 // --- Types --------------------------------------------------------------------
 

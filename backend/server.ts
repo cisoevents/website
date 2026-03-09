@@ -142,17 +142,48 @@ async function fetchLumaApiEvents(): Promise<LumaEventEntry[]> {
 
 const app = express();
 
+const defaultAllowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:5175',
+  'http://localhost:4173',
+  'http://localhost:4175',
+  'https://cisoevents.com',
+  'https://www.cisoevents.com',
+  'https://website-gray-psi-92.vercel.app',
+  'https://cisoevents-prototype.vercel.app',
+];
+
+const envAllowedOrigins = (process.env.ALLOWED_ORIGINS ?? '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const vercelFrontendUrl = (process.env.FRONTEND_URL ?? '').trim();
+const allowedOrigins = new Set<string>([
+  ...defaultAllowedOrigins,
+  ...envAllowedOrigins,
+  ...(vercelFrontendUrl ? [vercelFrontendUrl] : []),
+]);
+
+const isAllowedVercelPreviewOrigin = (origin: string): boolean => {
+  return /^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin);
+};
+
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'http://localhost:5175',
-    'http://localhost:4173',
-    'http://localhost:4175',
-    'https://cisoevents.com',
-    'https://www.cisoevents.com',
-    'https://cisoevents-prototype.vercel.app'
-  ],
+  origin: (origin, callback) => {
+    if (!origin) {
+      callback(null, true);
+      return;
+    }
+
+    if (allowedOrigins.has(origin) || isAllowedVercelPreviewOrigin(origin)) {
+      callback(null, true);
+      return;
+    }
+
+    callback(new Error(`CORS blocked for origin: ${origin}`));
+  },
 }));
 app.use(express.json());
 

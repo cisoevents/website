@@ -7,9 +7,9 @@ import {
   Play, ArrowRight, Star, Shield, CalendarPlus, Send,
   Phone, Mail, ExternalLink, X,
 } from 'lucide-react';
-import { podcasts, stats } from '../data/mockData';
+import { stats } from '../data/mockData';
 
-const API_BASE = (import.meta.env.VITE_API_URL as string | undefined)?.trim() || 'https://cisoevents-prototype-backend.vercel.app';
+const API_BASE = (import.meta.env.VITE_API_URL as string | undefined)?.trim() || 'https://backend-website-mu.vercel.app';
 import { useLumaEvents } from '../hooks/useLumaEvents';
 import {
   getEventImage,
@@ -574,55 +574,6 @@ function PastEvents() {
   );
 }
 
-// ─── Latest Podcasts ──────────────────────────────────────────────────────────
-function LatestPodcasts() {
-  const latest = podcasts.slice(0, 3);
-  return (
-    <section id="podcasts" className="py-20" style={{ backgroundColor: 'var(--color-bg)' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <p className="font-semibold text-sm uppercase tracking-widest mb-2" style={{ color: 'var(--color-accent)' }}>On-Demand</p>
-          <h2 className="section-title">Latest Podcasts</h2>
-          <p className="section-subtitle">Expert conversations on the topics that matter most</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
-          {latest.map(pod => (
-            <div key={pod.id} className="card overflow-hidden group">
-              <div className="relative overflow-hidden h-44" style={{ backgroundColor: 'var(--color-dark-bg)' }}>
-                <img
-                  src={pod.thumbnail}
-                  alt={pod.title}
-                  className="w-full h-full object-cover opacity-70 group-hover:opacity-90 group-hover:scale-105 transition-all duration-500"
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-14 h-14 rounded-full flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300" style={{ backgroundColor: 'var(--color-accent)' }}>
-                    <Play size={22} fill="white" className="text-white ml-1" />
-                  </div>
-                </div>
-                <div className="absolute bottom-3 right-3 bg-black/70 text-white text-xs font-medium px-2 py-0.5 rounded">
-                  {pod.duration}
-                </div>
-              </div>
-              <div className="p-5">
-                <h3 className="font-bold text-sm leading-snug mb-2 line-clamp-2" style={{ color: 'var(--color-heading)' }}>
-                  {pod.title}
-                </h3>
-                <p className="text-xs mb-3 line-clamp-2" style={{ color: 'var(--color-text-muted)' }}>{pod.description}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs" style={{ color: 'var(--color-text-dim)' }}>{pod.views} views</span>
-                  <span className="text-xs font-semibold flex items-center gap-1" style={{ color: 'var(--color-accent)' }}>
-                    Watch <ChevronRight size={12} />
-                  </span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 // ─── Contact Form ─────────────────────────────────────────────────────────────
 function ContactSection() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
@@ -668,7 +619,7 @@ function ContactSection() {
               Reach out and our team will get back to you shortly.
             </p>
 
-            {/* Calendly — Book a Call */}
+            {/* Calendly — Book a Calendar */}
             <button
               type="button"
               onClick={() => setCalendlyOpen(true)}
@@ -677,7 +628,7 @@ function ContactSection() {
               onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--color-accent-hover)')}
               onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'var(--color-accent)')}
             >
-              <Calendar size={18} /> Book a Call
+              <Calendar size={18} /> Book a Calendar
             </button>
 
             <div className="space-y-6">
@@ -813,10 +764,10 @@ function ContactSection() {
             style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
             role="dialog"
             aria-modal="true"
-            aria-label="Book a call"
+            aria-label="Book a calendar"
           >
             <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: 'var(--color-border)' }}>
-              <h3 className="font-semibold" style={{ color: 'var(--color-heading)' }}>Book a Call</h3>
+              <h3 className="font-semibold" style={{ color: 'var(--color-heading)' }}>Book a Calendar</h3>
               <button
                 type="button"
                 onClick={() => setCalendlyOpen(false)}
@@ -860,7 +811,6 @@ export default function Home() {
       <AboutSection />
       <UpcomingEvents />
       <PastEvents />
-      <LatestPodcasts />
       <ContactSection />
     </>
   );
