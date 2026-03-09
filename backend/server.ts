@@ -502,13 +502,10 @@ app.get('/api/luma/event/:slug', async (req: Request, res: Response) => {
   }
 });
 
-// ── YouTube RSS ───────────────────────────────────────────────────────────────
-const YT_HANDLE = 'horizonsummit';
-
-// Hardcoded fallback — avoids bot-detection scraping on every cold start
-const KNOWN_CHANNEL_IDS: Record<string, string> = {
-  horizonsummit: 'UCELI9tCv6_jcrI_KbWkCwOA',
-};
+// ── YouTube ───────────────────────────────────────────────────────────────────
+const YT_API_KEY    = (process.env.YOUTUBE_API_KEY ?? '').trim();
+const YT_CHANNEL_ID = (process.env.YOUTUBE_CHANNEL_ID ?? 'UCELI9tCv6_jcrI_KbWkCwOA').trim();
+const YT_BASE       = 'https://www.googleapis.com/youtube/v3';
 
 interface YouTubeVideo {
   id: string;
@@ -520,46 +517,28 @@ interface YouTubeVideo {
   channelTitle: string;
 }
 
-async function getYouTubeChannelId(handle: string): Promise<string> {
-  // Use hardcoded ID if known (avoids bot-detection issues)
-  if (KNOWN_CHANNEL_IDS[handle]) return KNOWN_CHANNEL_IDS[handle];
-
-  const cacheKey = `yt_channel_id_${handle}`;
-  const cached = cacheGet<string>(cacheKey);
-  if (cached) return cached;
-
-  const res = await fetch(`https://www.youtube.com/@${handle}`, {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36',
-      'Accept-Language': 'en-US,en;q=0.9',
-    },
-  });
-  const html = await res.text();
-
-  // extract channel ID from multiple patterns in page HTML
-  const canonicalMatch = html.match(/youtube\.com\/channel\/(UC[A-Za-z0-9_-]{20,})/);
-  const externalIdMatch = html.match(/"externalId":"(UC[A-Za-z0-9_-]{20,})"/);
-  const channelIdMeta = html.match(/channel_id=(UC[A-Za-z0-9_-]{20,})/);
-  const channelId = (canonicalMatch ?? externalIdMatch ?? channelIdMeta)?.[1];
-  if (!channelId) throw new Error(`Could not find channel ID for @${handle}`);
-
-  cacheSet(cacheKey, channelId, 24 * 60 * 60_000); // 24 h
-  return channelId;
+interface YouTubePlaylist {
+  id: string;
+  title: string;
+  description: string;
+  thumbnail: string;
+  itemCount: number;
+  publishedAt: string;
 }
 
-async function fetchYouTubeVideos(handle: string): Promise<YouTubeVideo[]> {
-  const channelId = await getYouTubeChannelId(handle);
+// ── RSS fallback (no API key needed, returns latest ~15 videos only) ──────────
+async function fetchVideosViaRSS(): Promise<YouTubeVideo[]> {
+  console.log('[YouTube] No API key — falling back to RSS feed');
   const rssRes = await fetch(
-    `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`,
+    `https://www.youtube.com/feeds/videos.xml?channel_id=${YT_CHANNEL_ID}`,
     { headers: { Accept: 'application/rss+xml, application/xml, text/xml' } },
   );
   if (!rssRes.ok) throw new Error(`YouTube RSS returned ${rssRes.status}`);
   const xml = await rssRes.text();
-
   const videos: YouTubeVideo[] = [];
   for (const match of xml.matchAll(/<entry>([\s\S]*?)<\/entry>/g)) {
     const e = match[1];
-    const videoId   = e.match(/<yt:videoId>([^<]+)<\/yt:videoId>/)?.[1];
+    const videoId = e.match(/<yt:videoId>([^<]+)<\/yt:videoId>/)?.[1];
     if (!videoId) continue;
     const title     = (e.match(/<title>([^<]+)<\/title>/)?.[1] ?? '')
       .replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'");
@@ -567,22 +546,194 @@ async function fetchYouTubeVideos(handle: string): Promise<YouTubeVideo[]> {
     const desc      = (e.match(/<media:description>([\s\S]*?)<\/media:description>/)?.[1] ?? '').substring(0, 200);
     const thumb     = e.match(/url="(https:\/\/i\.ytimg\.com\/vi\/[^"]+)"/)?.[1]
       ?? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
-    const author    = e.match(/<name>([^<]+)<\/name>/)?.[1] ?? 'Horizon Summit';
+    const author    = e.match(/<name>([^<]+)<\/name>/)?.[1] ?? 'CISOevents';
     videos.push({ id: videoId, title, description: desc, thumbnail: thumb, publishedAt: published, url: `https://www.youtube.com/watch?v=${videoId}`, channelTitle: author });
   }
   return videos;
 }
 
+// ── API v3 functions (require YOUTUBE_API_KEY) ────────────────────────────────
+async function fetchAllChannelVideos(): Promise<YouTubeVideo[]> {
+  const videos: YouTubeVideo[] = [];
+  let pageToken = '';
+
+  do {
+    const url = new URL(`${YT_BASE}/search`);
+    url.searchParams.set('part', 'snippet');
+    url.searchParams.set('type', 'video');
+    url.searchParams.set('channelId', YT_CHANNEL_ID);
+    url.searchParams.set('maxResults', '50');
+    url.searchParams.set('order', 'date');
+    url.searchParams.set('key', YT_API_KEY);
+    if (pageToken) url.searchParams.set('pageToken', pageToken);
+
+    const data = await fetch(url.toString()).then(r => r.json()) as Record<string, unknown>;
+    if (data.error) throw new Error(JSON.stringify(data.error));
+
+    const items = (data.items ?? []) as Array<Record<string, unknown>>;
+    for (const item of items) {
+      const snippet = item.snippet as Record<string, unknown>;
+      const idObj   = item.id as Record<string, unknown>;
+      const videoId = idObj?.videoId as string;
+      if (!videoId) continue;
+      const thumbs  = (snippet.thumbnails as Record<string, { url: string }>) ?? {};
+      const thumb   = thumbs.high?.url ?? thumbs.medium?.url ?? thumbs.default?.url ?? '';
+      videos.push({
+        id:           videoId,
+        title:        (snippet.title as string) ?? '',
+        description:  ((snippet.description as string) ?? '').substring(0, 200),
+        thumbnail:    thumb,
+        publishedAt:  (snippet.publishedAt as string) ?? '',
+        url:          `https://www.youtube.com/watch?v=${videoId}`,
+        channelTitle: (snippet.channelTitle as string) ?? '',
+      });
+    }
+
+    pageToken = (data.nextPageToken as string) ?? '';
+  } while (pageToken);
+
+  return videos;
+}
+
+// Fetch all playlists for the channel
+async function fetchAllPlaylists(): Promise<YouTubePlaylist[]> {
+  const playlists: YouTubePlaylist[] = [];
+  let pageToken = '';
+
+  do {
+    const url = new URL(`${YT_BASE}/playlists`);
+    url.searchParams.set('part', 'snippet,contentDetails');
+    url.searchParams.set('channelId', YT_CHANNEL_ID);
+    url.searchParams.set('maxResults', '50');
+    url.searchParams.set('key', YT_API_KEY);
+    if (pageToken) url.searchParams.set('pageToken', pageToken);
+
+    const data = await fetch(url.toString()).then(r => r.json()) as Record<string, unknown>;
+    if (data.error) throw new Error(JSON.stringify(data.error));
+
+    const items = (data.items ?? []) as Array<Record<string, unknown>>;
+    for (const item of items) {
+      const snippet        = item.snippet as Record<string, unknown>;
+      const contentDetails = item.contentDetails as Record<string, unknown>;
+      const thumbs         = (snippet.thumbnails as Record<string, { url: string }>) ?? {};
+      playlists.push({
+        id:          item.id as string,
+        title:       (snippet.title as string) ?? '',
+        description: (snippet.description as string) ?? '',
+        thumbnail:   thumbs.high?.url ?? thumbs.medium?.url ?? thumbs.default?.url ?? '',
+        itemCount:   (contentDetails?.itemCount as number) ?? 0,
+        publishedAt: (snippet.publishedAt as string) ?? '',
+      });
+    }
+
+    pageToken = (data.nextPageToken as string) ?? '';
+  } while (pageToken);
+
+  return playlists;
+}
+
+// Fetch videos inside a specific playlist
+async function fetchPlaylistVideos(playlistId: string): Promise<YouTubeVideo[]> {
+  const videos: YouTubeVideo[] = [];
+  let pageToken = '';
+
+  do {
+    const url = new URL(`${YT_BASE}/playlistItems`);
+    url.searchParams.set('part', 'snippet');
+    url.searchParams.set('playlistId', playlistId);
+    url.searchParams.set('maxResults', '50');
+    url.searchParams.set('key', YT_API_KEY);
+    if (pageToken) url.searchParams.set('pageToken', pageToken);
+
+    const data = await fetch(url.toString()).then(r => r.json()) as Record<string, unknown>;
+    if (data.error) throw new Error(JSON.stringify(data.error));
+
+    const items = (data.items ?? []) as Array<Record<string, unknown>>;
+    for (const item of items) {
+      const snippet = item.snippet as Record<string, unknown>;
+      const res     = snippet.resourceId as Record<string, unknown>;
+      const videoId = res?.videoId as string;
+      if (!videoId) continue;
+      const thumbs  = (snippet.thumbnails as Record<string, { url: string }>) ?? {};
+      videos.push({
+        id:           videoId,
+        title:        (snippet.title as string) ?? '',
+        description:  ((snippet.description as string) ?? '').substring(0, 200),
+        thumbnail:    thumbs.high?.url ?? thumbs.medium?.url ?? thumbs.default?.url ?? '',
+        publishedAt:  (snippet.publishedAt as string) ?? '',
+        url:          `https://www.youtube.com/watch?v=${videoId}`,
+        channelTitle: (snippet.channelTitle as string) ?? '',
+      });
+    }
+
+    pageToken = (data.nextPageToken as string) ?? '';
+  } while (pageToken);
+
+  return videos;
+}
+
+// GET /api/youtube/videos — all channel videos (API v3 with RSS fallback)
 app.get('/api/youtube/videos', async (_req: Request, res: Response) => {
-  const cacheKey = `yt_videos_${YT_HANDLE}`;
+  const cacheKey = `yt_videos_${YT_CHANNEL_ID}`;
+  const cached = cacheGet<YouTubeVideo[]>(cacheKey);
+  if (cached) return res.json({ ok: true, videos: cached, total: cached.length, cached: true, source: 'cache' });
+  try {
+    let videos: YouTubeVideo[];
+    let source: string;
+    if (YT_API_KEY) {
+      try {
+        videos = await fetchAllChannelVideos();
+        source = 'api';
+      } catch (apiErr) {
+        console.warn('[YouTube] API failed, falling back to RSS:', apiErr);
+        videos = await fetchVideosViaRSS();
+        source = 'rss-fallback';
+      }
+    } else {
+      videos = await fetchVideosViaRSS();
+      source = 'rss';
+    }
+    cacheSet(cacheKey, videos, 60 * 60_000); // 1 h
+    res.json({ ok: true, videos, total: videos.length, cached: false, source });
+  } catch (err) {
+    console.error('[YouTube videos error]', err);
+    res.status(502).json({ ok: false, error: String(err) });
+  }
+});
+
+// GET /api/youtube/playlists — all channel playlists (requires API key)
+app.get('/api/youtube/playlists', async (_req: Request, res: Response) => {
+  if (!YT_API_KEY) {
+    return res.json({ ok: true, playlists: [], total: 0, note: 'YOUTUBE_API_KEY not set — playlists unavailable' });
+  }
+  const cacheKey = `yt_playlists_${YT_CHANNEL_ID}`;
+  const cached = cacheGet<YouTubePlaylist[]>(cacheKey);
+  if (cached) return res.json({ ok: true, playlists: cached, total: cached.length, cached: true });
+  try {
+    const playlists = await fetchAllPlaylists();
+    cacheSet(cacheKey, playlists, 60 * 60_000); // 1 h
+    res.json({ ok: true, playlists, total: playlists.length, cached: false });
+  } catch (err) {
+    console.error('[YouTube playlists error]', err);
+    res.status(502).json({ ok: false, error: String(err) });
+  }
+});
+
+// GET /api/youtube/playlist/:id — videos inside a playlist (requires API key)
+app.get('/api/youtube/playlist/:id', async (req: Request, res: Response) => {
+  if (!YT_API_KEY) {
+    return res.json({ ok: true, videos: [], total: 0, note: 'YOUTUBE_API_KEY not set — playlist items unavailable' });
+  }
+  const id = String(req.params.id);
+  const cacheKey = `yt_playlist_items_${id}`;
   const cached = cacheGet<YouTubeVideo[]>(cacheKey);
   if (cached) return res.json({ ok: true, videos: cached, total: cached.length, cached: true });
   try {
-    const videos = await fetchYouTubeVideos(YT_HANDLE);
+    const videos = await fetchPlaylistVideos(id);
     cacheSet(cacheKey, videos, 60 * 60_000); // 1 h
     res.json({ ok: true, videos, total: videos.length, cached: false });
   } catch (err) {
-    console.error('[YouTube error]', err);
+    console.error('[YouTube playlist items error]', err);
     res.status(502).json({ ok: false, error: String(err) });
   }
 });

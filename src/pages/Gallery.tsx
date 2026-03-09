@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Youtube, ChevronLeft, ChevronRight, ExternalLink, RefreshCw, Play } from 'lucide-react';
+﻿import { useState, useEffect, useCallback } from 'react';
+import { Youtube, ChevronLeft, ChevronRight, ExternalLink, RefreshCw, Play, ListVideo } from 'lucide-react';
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 interface YouTubeVideo {
   id: string;
   title: string;
@@ -12,11 +12,20 @@ interface YouTubeVideo {
   channelTitle: string;
 }
 
-// ── Constants ─────────────────────────────────────────────────────────────────
+interface YouTubePlaylist {
+  id: string;
+  title: string;
+  description: string;
+  thumbnail: string;
+  itemCount: number;
+  publishedAt: string;
+}
+
+// â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const VIDEOS_PER_PAGE = 8;
 const API_BASE = (import.meta.env.VITE_API_URL as string | undefined)?.trim() || 'https://backend-website-mu.vercel.app';
 
-// ── YouTube Videos hook ───────────────────────────────────────────────────────
+// â”€â”€ Hooks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function useYouTubeVideos() {
   const [videos, setVideos]   = useState<YouTubeVideo[]>([]);
   const [loading, setLoading] = useState(true);
@@ -41,7 +50,42 @@ function useYouTubeVideos() {
   return { videos, loading, error, refresh: load };
 }
 
-// ── Embed Modal ───────────────────────────────────────────────────────────────
+function usePlaylists() {
+  const [playlists, setPlaylists] = useState<YouTubePlaylist[]>([]);
+
+  useEffect(() => {
+    fetch(`${API_BASE}/api/youtube/playlists`)
+      .then(r => r.json())
+      .then(data => { if (data.ok && data.playlists?.length) setPlaylists(data.playlists); })
+      .catch(() => {/* silently ignore */});
+  }, []);
+
+  return playlists;
+}
+
+function usePlaylistVideos(playlistId: string | null) {
+  const [videos, setVideos]   = useState<YouTubeVideo[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!playlistId) return;
+    setLoading(true);
+    setError(null);
+    fetch(`${API_BASE}/api/youtube/playlist/${playlistId}`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.ok) setVideos(data.videos);
+        else throw new Error(data.error ?? 'Unknown error');
+      })
+      .catch(e => setError(String(e)))
+      .finally(() => setLoading(false));
+  }, [playlistId]);
+
+  return { videos, loading, error };
+}
+
+// â”€â”€ Embed Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function VideoModal({ video, onClose }: { video: YouTubeVideo; onClose: () => void }) {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
@@ -88,7 +132,7 @@ function VideoModal({ video, onClose }: { video: YouTubeVideo; onClose: () => vo
   );
 }
 
-// ── Video Card ────────────────────────────────────────────────────────────────
+// â”€â”€ Video Card â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function VideoCard({ video, onClick }: { video: YouTubeVideo; onClick: () => void }) {
   const [imgErr, setImgErr] = useState(false);
   const thumb = imgErr
@@ -101,7 +145,6 @@ function VideoCard({ video, onClick }: { video: YouTubeVideo; onClick: () => voi
       className="group text-left rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
       style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
     >
-      {/* Thumbnail */}
       <div className="relative overflow-hidden" style={{ aspectRatio: '16/9' }}>
         <img
           src={thumb}
@@ -110,7 +153,6 @@ function VideoCard({ video, onClick }: { video: YouTubeVideo; onClick: () => voi
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
         <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
-        {/* Play button */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div
             className="w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-transform duration-300 group-hover:scale-110"
@@ -119,14 +161,12 @@ function VideoCard({ video, onClick }: { video: YouTubeVideo; onClick: () => voi
             <Play size={22} className="text-white ml-1" fill="white" />
           </div>
         </div>
-        {/* Duration placeholder */}
         <div className="absolute bottom-2 right-2">
           <span className="text-xs text-white font-semibold bg-black/70 px-1.5 py-0.5 rounded">
             {new Date(video.publishedAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
           </span>
         </div>
       </div>
-      {/* Info */}
       <div className="p-4">
         <h3
           className="font-semibold text-sm leading-snug line-clamp-2 mb-1 transition-colors group-hover:text-blue-500"
@@ -140,14 +180,27 @@ function VideoCard({ video, onClick }: { video: YouTubeVideo; onClick: () => voi
   );
 }
 
-// ── Main Gallery Page ─────────────────────────────────────────────────────────
+// â”€â”€ Main Gallery Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function Gallery() {
-  const { videos, loading, error, refresh } = useYouTubeVideos();
+  const { videos: allVideos, loading: allLoading, error: allError, refresh } = useYouTubeVideos();
+  const playlists = usePlaylists();
+  const [selectedPlaylist, setSelectedPlaylist] = useState<string | null>(null);
+  const { videos: playlistVideos, loading: plLoading, error: plError } = usePlaylistVideos(selectedPlaylist);
+
   const [page, setPage]       = useState(1);
   const [activeVideo, setActiveVideo] = useState<YouTubeVideo | null>(null);
 
+  const videos  = selectedPlaylist ? playlistVideos : allVideos;
+  const loading = selectedPlaylist ? plLoading : allLoading;
+  const error   = selectedPlaylist ? plError : allError;
+
   const totalPages = Math.ceil(videos.length / VIDEOS_PER_PAGE);
   const paged      = videos.slice((page - 1) * VIDEOS_PER_PAGE, page * VIDEOS_PER_PAGE);
+
+  const selectFilter = (id: string | null) => {
+    setSelectedPlaylist(id);
+    setPage(1);
+  };
 
   return (
     <div className="pt-16" style={{ backgroundColor: 'var(--color-bg)' }}>
@@ -177,13 +230,15 @@ export default function Gallery() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-20">
 
         {/* Channel header */}
-        <div className="flex items-center gap-3 mb-8 p-4 rounded-xl" style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+        <div className="flex items-center gap-3 mb-6 p-4 rounded-xl" style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
           <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: '#FF0000' }}>
             <Youtube size={18} className="text-white" />
           </div>
           <div>
             <p className="font-semibold text-sm" style={{ color: 'var(--color-heading)' }}>Horizon Summit</p>
-            <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>Latest videos from our YouTube channel</p>
+            <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+              {allVideos.length > 0 ? `${allVideos.length} videos` : 'Latest videos from our YouTube channel'}
+            </p>
           </div>
           <div className="ml-auto flex items-center gap-2">
             <button
@@ -194,7 +249,7 @@ export default function Gallery() {
               onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
               onMouseLeave={e => e.currentTarget.style.color = 'var(--color-text-dim)'}
             >
-              <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+              <RefreshCw size={14} className={allLoading ? 'animate-spin' : ''} />
             </button>
             <a
               href="https://www.youtube.com/@horizonsummit/videos"
@@ -207,6 +262,42 @@ export default function Gallery() {
             </a>
           </div>
         </div>
+
+        {/* Playlist filter tabs */}
+        {playlists.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-8">
+            <button
+              onClick={() => selectFilter(null)}
+              className="flex items-center gap-1.5 text-sm font-semibold px-4 py-2 rounded-full transition-all"
+              style={
+                selectedPlaylist === null
+                  ? { backgroundColor: 'var(--color-accent)', color: '#fff' }
+                  : { backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)', color: 'var(--color-text-muted)' }
+              }
+            >
+              All Videos
+              <span className="text-xs opacity-70">({allVideos.length})</span>
+            </button>
+            {playlists.map(pl => (
+              <button
+                key={pl.id}
+                onClick={() => selectFilter(pl.id)}
+                className="flex items-center gap-1.5 text-sm font-semibold px-4 py-2 rounded-full transition-all"
+                style={
+                  selectedPlaylist === pl.id
+                    ? { backgroundColor: 'var(--color-accent)', color: '#fff' }
+                    : { backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)', color: 'var(--color-text-muted)' }
+                }
+                onMouseEnter={e => { if (selectedPlaylist !== pl.id) { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)'; } }}
+                onMouseLeave={e => { if (selectedPlaylist !== pl.id) { e.currentTarget.style.borderColor = 'var(--color-border)'; e.currentTarget.style.color = 'var(--color-text-muted)'; } }}
+              >
+                <ListVideo size={14} />
+                {pl.title.length > 35 ? pl.title.substring(0, 35) + 'â€¦' : pl.title}
+                <span className="text-xs opacity-70">({pl.itemCount})</span>
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Error */}
         {error && (
@@ -258,7 +349,7 @@ export default function Gallery() {
                   const showEllipsisAfter  = p === page + 2 && page < totalPages - 2;
                   if (!show && !showEllipsisBefore && !showEllipsisAfter) return null;
                   if (showEllipsisBefore || showEllipsisAfter) {
-                    return <span key={p} className="text-sm px-1" style={{ color: 'var(--color-text-dim)' }}>…</span>;
+                    return <span key={p} className="text-sm px-1" style={{ color: 'var(--color-text-dim)' }}>â€¦</span>;
                   }
                   return (
                     <button
