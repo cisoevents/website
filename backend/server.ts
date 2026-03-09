@@ -592,9 +592,15 @@ app.get('/api/health', (_req: Request, res: Response) => {
   res.json({ status: 'ok' });
 });
 
-app.listen(PORT, () => {
-  console.log(`✓ CISOevents API server running on http://localhost:${PORT}`);
-});
+// Export for Vercel serverless
+export default app;
+
+// Listen only when running locally (not on Vercel)
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`✓ CISOevents API server running on http://localhost:${PORT}`);
+  });
+}
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function escapeHtml(str: string): string {
