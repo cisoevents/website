@@ -4,7 +4,7 @@ import heroBg from '../assets/bg_hero_image.jpeg';
 import heroVideo from '../assets/BG_HERO_2_SUMMIT_2.mp4';
 import {
   Calendar, MapPin, Users, Mic, Award, ChevronRight,
-  Play, ArrowRight, Star, Shield, CalendarPlus, Send,
+  Play, ArrowRight, Star, Shield, Send,
   Phone, Mail, ExternalLink, X,
 } from 'lucide-react';
 import { stats } from '../data/mockData';
@@ -20,103 +20,6 @@ import {
   TRACK_LABELS,
   TRACK_COLORS,
 } from '../services/lumaService';
-
-// ─── Add to Calendar ──────────────────────────────────────────────────────────
-function AddToCalendar() {
-  const [open, setOpen] = useState(false);
-
-  const title = 'CISOevents 2026';
-  const description = 'The premier cybersecurity and AI leadership summit — 500+ security executives, San Francisco, CA.';
-  const location = 'San Francisco, CA';
-  const start = '20260828T090000Z';
-  const end   = '20260829T180000Z';
-
-  const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${start}%2F${end}&details=${encodeURIComponent(description)}&location=${encodeURIComponent(location)}`;
-  const outlookUrl = `https://outlook.live.com/calendar/0/deeplink/compose?subject=${encodeURIComponent(title)}&startdt=2026-08-28T09:00:00&enddt=2026-08-29T18:00:00&location=${encodeURIComponent(location)}&body=${encodeURIComponent(description)}`;
-  const yahooUrl = `https://calendar.yahoo.com/?v=60&title=${encodeURIComponent(title)}&st=${start}&et=${end}&in_loc=${encodeURIComponent(location)}&desc=${encodeURIComponent(description)}`;
-
-  const downloadICS = () => {
-    const ics = [
-      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//CISOevents//EN',
-      'BEGIN:VEVENT',
-      `DTSTART:${start}`, `DTEND:${end}`,
-      `SUMMARY:${title}`, `DESCRIPTION:${description}`, `LOCATION:${location}`,
-      'END:VEVENT', 'END:VCALENDAR'
-    ].join('\r\n');
-    const blob = new Blob([ics], { type: 'text/calendar' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = 'ciso-events-2026.ics'; a.click();
-    URL.revokeObjectURL(url);
-    setOpen(false);
-  };
-
-  const options = [
-    { label: '📅  Google Calendar', href: googleUrl, external: true },
-    { label: '🍎  Apple Calendar (.ics)', href: null, onClick: downloadICS },
-    { label: '📧  Outlook', href: outlookUrl, external: true },
-    { label: '🗓  Yahoo Calendar', href: yahooUrl, external: true },
-  ];
-
-  return (
-    <div className="relative">
-      <button
-        onClick={() => setOpen(o => !o)}
-        className="flex items-center gap-2 border-2 text-base px-8 py-3.5 rounded-lg transition-all duration-200 font-semibold"
-        style={{ borderColor: 'var(--color-accent)', color: 'var(--color-accent)' }}
-        onMouseEnter={e => {
-          e.currentTarget.style.backgroundColor = 'var(--color-accent-hover)';
-          e.currentTarget.style.borderColor = 'var(--color-accent-hover)';
-          e.currentTarget.style.color = '#fff';
-        }}
-        onMouseLeave={e => {
-          e.currentTarget.style.backgroundColor = '';
-          e.currentTarget.style.borderColor = 'var(--color-accent)';
-          e.currentTarget.style.color = 'var(--color-accent)';
-        }}
-      >
-        <CalendarPlus size={18} /> Add to Calendar
-      </button>
-
-      {open && (
-        <>
-          <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute top-full mt-2 left-0 z-20 rounded-xl shadow-2xl overflow-hidden w-56"
-            style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
-            {options.map(({ label, href, external, onClick }) =>
-              onClick ? (
-                <button
-                  key={label}
-                  onClick={onClick}
-                  className="w-full text-left px-4 py-3 text-sm transition-colors"
-                  style={{ color: 'var(--color-text)', borderBottom: '1px solid var(--color-border-light)' }}
-                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'var(--color-hover-5)'; e.currentTarget.style.color = 'var(--color-accent)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'var(--color-text)'; }}
-                >
-                  {label}
-                </button>
-              ) : (
-                <a
-                  key={label}
-                  href={href}
-                  target={external ? '_blank' : undefined}
-                  rel="noopener noreferrer"
-                  onClick={() => setOpen(false)}
-                  className="block px-4 py-3 text-sm transition-colors"
-                  style={{ color: 'var(--color-text)', borderBottom: '1px solid var(--color-border-light)' }}
-                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'var(--color-hover-5)'; e.currentTarget.style.color = 'var(--color-accent)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'var(--color-text)'; }}
-                >
-                  {label}
-                </a>
-              )
-            )}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 function Hero() {
@@ -181,7 +84,6 @@ function Hero() {
             >
               Register for Event <ArrowRight size={18} />
             </button>
-            <AddToCalendar />
           </div>
         </div>
       </div>
