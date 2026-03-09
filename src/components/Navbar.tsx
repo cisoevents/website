@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Menu, X, ShieldCheck } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import logo from '../assets/CISOevents-Logo-R2.png';
 
 const navLinks = [
   { label: 'Events',   to: '/events' },
-  { label: 'Speakers', to: '/speakers' },
   { label: 'About',    to: '/about' },
   { label: 'Gallery',  to: '/gallery' },
   { label: 'Contact',  to: '/#contact' },
@@ -83,16 +82,6 @@ export default function Navbar() {
 
           {/* Desktop right CTAs */}
           <div className="hidden md:flex items-center gap-2">
-            {/* Admin — subtle icon link */}
-            <Link
-              to="/admin"
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg transition-all text-gray-400 hover:text-gray-700 hover:bg-gray-100"
-              title="Admin Panel"
-            >
-              <ShieldCheck size={15} />
-              <span className="hidden lg:inline">Admin</span>
-            </Link>
-
             {/* Luma Register Button */}
             <button
               className="luma-checkout--button text-white font-semibold text-sm px-5 py-2 rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
@@ -146,12 +135,6 @@ export default function Navbar() {
               </NavLink>
             )
           ))}
-          <Link
-            to="/admin"
-            className="flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium text-gray-400 hover:text-gray-700 hover:bg-gray-50 transition-colors"
-          >
-            <ShieldCheck size={16} /> Admin Panel
-          </Link>
           <button
             className="luma-checkout--button w-full mt-1 text-white font-semibold px-6 py-3 rounded-lg text-center text-sm transition-all"
             type="button"

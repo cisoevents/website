@@ -7,7 +7,9 @@ import {
   Play, ArrowRight, Star, Shield, CalendarPlus, Send,
   Phone, Mail, ExternalLink,
 } from 'lucide-react';
-import { speakers, podcasts, sponsors, stats } from '../data/mockData';
+import { podcasts, stats } from '../data/mockData';
+
+const API_BASE = (import.meta.env.VITE_API_URL as string | undefined)?.trim() || 'https://cisoevents-prototype-backend.vercel.app';
 import { useLumaEvents } from '../hooks/useLumaEvents';
 import {
   getEventImage,
@@ -196,11 +198,12 @@ function Hero() {
 // ─── Stats Bar ────────────────────────────────────────────────────────────────
 function StatsBar() {
   const icons = { Users, Mic, Award, Calendar };
+  const visibleStats = stats.filter(s => s.label !== 'Speakers' && s.label !== 'Sponsors');
   return (
     <section className="py-6" style={{ backgroundColor: 'var(--color-accent)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-          {stats.map(({ label, value, icon }) => {
+        <div className="grid grid-cols-2 md:grid-cols-2 gap-4 sm:gap-6">
+          {visibleStats.map(({ label, value, icon }) => {
             const Icon = icons[icon as keyof typeof icons];
             return (
               <div key={label} className="flex flex-col items-center text-center text-white gap-1">
@@ -250,8 +253,8 @@ function AboutSection() {
               },
               {
                 icon: Mic,
-                title: 'Speaker Opportunities',
-                body: 'Elevate your personal brand as a thought leader with speaking slots and placement during the summit, and partnerships to establish yourself at the forefront of these transformative industries.',
+                title: 'Thought Leadership Sessions',
+                body: 'Join expert-led sessions and strategic discussions designed to help leadership teams stay ahead of emerging cyber and AI challenges.',
               },
               {
                 icon: Shield,
@@ -571,51 +574,6 @@ function PastEvents() {
   );
 }
 
-// ─── Featured Speakers ────────────────────────────────────────────────────────
-function FeaturedSpeakers() {
-  const featured = speakers.slice(0, 4);
-  return (
-    <section className="py-20" style={{ backgroundColor: 'var(--color-bg-alt)' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <p className="font-semibold text-sm uppercase tracking-widest mb-2" style={{ color: 'var(--color-accent)' }}>Industry Leaders</p>
-          <h2 className="section-title">Featured Speakers</h2>
-          <p className="section-subtitle">Learn from the brightest minds in cybersecurity and AI</p>
-        </div>
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-          {featured.map(sp => (
-            <div
-              key={sp.id}
-              className="group text-center p-6 rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-              style={{ border: '1px solid var(--color-border)', backgroundColor: 'var(--color-surface)' }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--color-accent-30)'}
-              onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--color-border)'}
-            >
-              <div className="relative mx-auto mb-4 w-24 h-24">
-                <img
-                  src={sp.photo}
-                  alt={sp.name}
-                  className="w-24 h-24 rounded-full object-cover border-4 transition-all duration-300"
-                  style={{ borderColor: 'var(--color-border)' }}
-                />
-                <div className={`absolute -bottom-1 -right-1 w-7 h-7 rounded-full border-2 border-white flex items-center justify-center text-white text-[10px] font-bold ${
-                  sp.track === 'AI' ? 'bg-purple-500' :
-                  sp.track === 'Startup' ? 'bg-orange-500' : 'bg-blue-500'
-                }`}>
-                  {sp.track[0]}
-                </div>
-              </div>
-              <h3 className="font-bold text-sm" style={{ color: 'var(--color-heading)' }}>{sp.name}</h3>
-              <p className="text-xs mt-0.5" style={{ color: 'var(--color-text-muted)' }}>{sp.title}</p>
-              <p className="text-xs font-medium mt-0.5" style={{ color: 'var(--color-accent)' }}>{sp.company}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 // ─── Latest Podcasts ──────────────────────────────────────────────────────────
 function LatestPodcasts() {
   const latest = podcasts.slice(0, 3);
@@ -665,62 +623,6 @@ function LatestPodcasts() {
   );
 }
 
-// ─── Sponsors ─────────────────────────────────────────────────────────────────
-function Sponsors() {
-  const { platinum, gold, silver } = sponsors;
-  const SponsorsRow = ({ tier, items, color }: { tier: string; items: { id: number; name: string }[]; color: string }) => (
-    <div className="mb-8">
-      <div className="text-center mb-4">
-        <span className={`inline-block text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full ${color}`}>
-          {tier}
-        </span>
-      </div>
-      <div className={`flex flex-wrap justify-center gap-4 ${tier === 'Platinum' ? 'gap-6' : tier === 'Gold' ? 'gap-5' : 'gap-3'}`}>
-        {items.map(sp => (
-          <div
-            key={sp.id}
-            className={`flex items-center justify-center rounded-xl font-bold hover:shadow-md transition-all duration-200 cursor-pointer ${
-              tier === 'Platinum' ? 'w-40 h-16 text-sm' :
-              tier === 'Gold' ? 'w-32 h-12 text-xs' :
-              'w-28 h-10 text-xs'
-            }`}
-            style={{ color: 'var(--color-heading)', border: '1px solid var(--color-border)', backgroundColor: 'var(--color-surface)' }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--color-accent)'}
-            onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--color-border)'}
-          >
-            {sp.name}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-  return (
-    <section id="sponsors" className="py-20" style={{ backgroundColor: 'var(--color-bg-alt)' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <p className="font-semibold text-sm uppercase tracking-widest mb-2" style={{ color: 'var(--color-accent)' }}>Our Partners</p>
-          <h2 className="section-title">Event Sponsors</h2>
-          <p className="section-subtitle">Proud to be supported by industry-leading organisations</p>
-        </div>
-        <SponsorsRow tier="Platinum" items={platinum} color="bg-gray-900 text-white" />
-        <SponsorsRow tier="Gold" items={gold} color="bg-amber-500 text-white" />
-        <SponsorsRow tier="Silver" items={silver} color="bg-gray-400 text-white" />
-        <div className="text-center mt-10">
-          <a
-            href="mailto:charles@cisoevents.com"
-            className="inline-flex items-center gap-2 border-2 font-semibold px-6 py-3 rounded-lg transition-all"
-            style={{ borderColor: 'var(--color-accent)', color: 'var(--color-accent)' }}
-            onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'var(--color-accent)'; e.currentTarget.style.color = '#fff'; }}
-            onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'var(--color-accent)'; }}
-          >
-            Become a Sponsor <ArrowRight size={16} />
-          </a>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 // ─── Contact Form ─────────────────────────────────────────────────────────────
 function ContactSection() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
@@ -736,7 +638,7 @@ function ContactSection() {
     setSending(true);
     setError('');
     try {
-      const res = await fetch('/api/contact', {
+      const res = await fetch(`${API_BASE}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
@@ -761,9 +663,20 @@ function ContactSection() {
             <p className="font-semibold text-sm uppercase tracking-widest mb-3" style={{ color: 'var(--color-accent)' }}>Get in Touch</p>
             <h2 className="section-title mb-4">Contact Us</h2>
             <p className="text-lg leading-relaxed mb-10" style={{ color: 'var(--color-text-muted)' }}>
-              Have questions about CISOevents? Interested in speaking, sponsoring, or attending?
+              Have questions about CISOevents? Interested in attending?
               Reach out and our team will get back to you shortly.
             </p>
+
+            {/* Calendly — Book a Call */}
+            <a
+              href="https://calendly.com/cisoevents"
+              className="inline-flex items-center gap-2 font-semibold px-6 py-3 rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg mb-8"
+              style={{ backgroundColor: 'var(--color-accent)', color: '#fff' }}
+              onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--color-accent-hover)')}
+              onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'var(--color-accent)')}
+            >
+              <Calendar size={18} /> Book a Call
+            </a>
 
             <div className="space-y-6">
               <div className="flex items-center gap-4">
@@ -897,9 +810,7 @@ export default function Home() {
       <AboutSection />
       <UpcomingEvents />
       <PastEvents />
-      <FeaturedSpeakers />
       <LatestPodcasts />
-      <Sponsors />
       <ContactSection />
     </>
   );

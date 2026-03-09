@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, Linkedin, Twitter, Youtube, Facebook, ChevronDown } from 'lucide-react';
 import logo from '../assets/CISOevents-Logo-R2.png';
@@ -47,10 +47,6 @@ const faqs = [
     a: "Click 'Register Now' on any event. You'll be taken to Luma — our official registration platform — to complete sign-up.",
   },
   {
-    q: 'Can my company sponsor?',
-    a: 'Yes! We offer tiered sponsor packages. Email charlesp@cisoevents.com or call +1 (321) 236-2561 to discuss opportunities.',
-  },
-  {
     q: 'Are events recorded?',
     a: 'Many events are recorded. Highlights and keynotes are available on our YouTube channel (@horizonsummit) and in the Gallery.',
   },
@@ -88,10 +84,8 @@ export default function Footer() {
     <footer style={{ backgroundColor: 'var(--color-dark-bg)' }} className="text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-8">
 
-        {/* â”€â”€ Main grid â”€â”€ */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
 
-          {/* Brand â€” spans 2 cols on lg */}
           <div className="lg:col-span-2">
             <div className="mb-4">
               <img src={logo} alt="CISOevents" className="h-7 w-auto brightness-0 invert" />
@@ -118,7 +112,6 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Access */}
           <div>
             <h4 className="font-semibold text-xs uppercase tracking-wider mb-5" style={{ color: 'var(--color-accent)' }}>Quick Access</h4>
             <ul className="space-y-2.5">
@@ -126,8 +119,6 @@ export default function Footer() {
                 { label: 'Upcoming Events', to: '/events' },
                 { label: 'Past Events',     to: '/events?tab=past' },
                 { label: 'Gallery',         to: '/gallery' },
-                { label: 'Speakers',        to: '/speakers' },
-                { label: 'Sponsors',        to: '/#sponsors' },
                 { label: 'Podcasts',        to: '/#podcasts' },
                 { label: 'FAQs',            to: '/faq' },
               ].map(link => (
@@ -143,7 +134,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact */}
           <div>
             <h4 className="font-semibold text-xs uppercase tracking-wider mb-5" style={{ color: 'var(--color-accent)' }}>Contact</h4>
             <ul className="space-y-3.5">
@@ -174,7 +164,6 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* FAQs */}
           <div>
             <h4 className="font-semibold text-xs uppercase tracking-wider mb-5" style={{ color: 'var(--color-accent)' }}>FAQs</h4>
             {faqs.map(({ q, a }) => (
@@ -183,7 +172,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* â”€â”€ Bottom bar â”€â”€ */}
         <div className="border-t border-white/10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-xs" style={{ color: 'var(--color-text-dim)' }}>
             © 2026 CISOevents. All rights reserved. A Neptune Media Company.
