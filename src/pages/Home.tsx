@@ -181,43 +181,6 @@ function AboutSection() {
           </div>
         </div>
 
-        {/* Startup Track */}
-        <div className="mb-16">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="h-px flex-1" style={{ backgroundColor: 'var(--color-border)' }} />
-            <span className="text-xs font-bold uppercase tracking-widest whitespace-nowrap px-2" style={{ color: 'var(--color-heading)' }}>
-              CISOevents — Startup Track
-            </span>
-            <div className="h-px flex-1" style={{ backgroundColor: 'var(--color-border)' }} />
-          </div>
-          <div className="rounded-2xl p-8 md:p-12" style={{ backgroundColor: 'var(--color-dark-bg)' }}>
-            <h3 className="text-white font-bold text-xl mb-2">Who Should Attend the Investor Conference?</h3>
-            <p className="text-sm mb-8" style={{ color: 'var(--color-text-muted)' }}>Built for founders, executives, and capital-seekers ready to accelerate growth.</p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                {
-                  title: 'Executives Seeking Public Listing Guidance',
-                  body: 'CEOs, CFOs, and C-Suite leaders from mid-cap companies seeking insights on navigating major exchanges like NYSE and Nasdaq.',
-                },
-                {
-                  title: 'Growth-Stage Companies Seeking Capital',
-                  body: 'Founders and executives looking to raise capital for their ventures.',
-                },
-                {
-                  title: 'Investment-Ready Startups',
-                  body: 'Startups seeking funding opportunities can pitch directly to attending investors.',
-                },
-              ].map(({ title, body }) => (
-                <div key={title} className="border border-white/10 rounded-xl p-5">
-                  <div className="w-2 h-2 rounded-full mb-3" style={{ backgroundColor: 'var(--color-accent)' }} />
-                  <h4 className="text-white font-semibold text-sm mb-2">{title}</h4>
-                  <p className="text-xs leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>{body}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
         {/* About Series */}
         <div className="text-center max-w-2xl mx-auto">
           <p className="text-base leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
@@ -363,119 +326,6 @@ function UpcomingEvents() {
   );
 }
 
-// ─── Past Events ─────────────────────────────────────────────────────────────
-function PastEvents() {
-  const { past, loading } = useLumaEvents();
-  const show = past.slice(0, 3);
-
-  if (!loading && show.length === 0) return null;
-
-  return (
-    <section className="py-20" style={{ backgroundColor: 'var(--color-bg-alt)' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <p className="font-semibold text-sm uppercase tracking-widest mb-2" style={{ color: 'var(--color-accent)' }}>Look Back</p>
-          <h2 className="section-title">Past Events</h2>
-          <p className="section-subtitle">Relive the conversations that shaped cybersecurity</p>
-        </div>
-
-        {/* Loading skeleton */}
-        {loading && show.length === 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="rounded-2xl overflow-hidden animate-pulse" style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
-                <div className="h-48" style={{ backgroundColor: 'var(--color-dark-bg)' }} />
-                <div className="p-5 space-y-3">
-                  <div className="h-5 rounded" style={{ backgroundColor: 'var(--color-border)' }} />
-                  <div className="h-4 rounded w-3/4" style={{ backgroundColor: 'var(--color-border)' }} />
-                  <div className="h-4 rounded w-1/2" style={{ backgroundColor: 'var(--color-border)' }} />
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {show.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-            {show.map(ev => {
-              const location   = getEventLocation(ev);
-              const lumaUrl    = getLumaEventUrl(ev);
-              const track      = getEventTrack(ev);
-              const trackColor = TRACK_COLORS[track];
-              return (
-                <div key={ev.api_id} className="card overflow-hidden group opacity-90 hover:opacity-100 transition-opacity">
-                  <div className="relative overflow-hidden h-48">
-                    <img
-                      src={getEventImage(ev)}
-                      alt={ev.name}
-                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                    <div className="absolute top-3 left-3 flex gap-1.5">
-                      <span className="bg-gray-600 text-white text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">
-                        Past
-                      </span>
-                      <span
-                        className="text-xs font-bold px-2.5 py-1 rounded-full"
-                        style={{ backgroundColor: trackColor.bg, color: trackColor.text, border: `1px solid ${trackColor.border}`, backdropFilter: 'blur(4px)' }}
-                      >
-                        {TRACK_LABELS[track]}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-5">
-                    <h3
-                      className="font-bold text-lg mb-2 leading-snug transition-colors"
-                      style={{ color: 'var(--color-heading)' }}
-                      onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
-                      onMouseLeave={e => e.currentTarget.style.color = 'var(--color-heading)'}
-                    >
-                      {ev.name}
-                    </h3>
-                    <div className="flex items-center gap-2 text-sm mb-1.5" style={{ color: 'var(--color-text-muted)' }}>
-                      <Calendar size={14} style={{ color: 'var(--color-accent)' }} />
-                      <span>{formatEventDateRange(ev)}</span>
-                    </div>
-                    {location && (
-                      <div className="flex items-center gap-2 text-sm mb-4" style={{ color: 'var(--color-text-muted)' }}>
-                        <MapPin size={14} style={{ color: 'var(--color-accent)' }} />
-                        <span>{location}</span>
-                      </div>
-                    )}
-                    <a
-                      href={lumaUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-1.5 w-full font-semibold text-sm py-2.5 rounded-lg transition-all duration-200"
-                      style={{ border: '1px solid var(--color-border)', color: 'var(--color-text-muted)', backgroundColor: 'transparent' }}
-                      onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.color = 'var(--color-accent)'; }}
-                      onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--color-border)'; e.currentTarget.style.color = 'var(--color-text-muted)'; }}
-                    >
-                      View Recap <ExternalLink size={13} />
-                    </a>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-
-        <div className="text-center mt-10">
-          <Link
-            to="/events?tab=past"
-            className="inline-flex items-center gap-2 border-2 font-semibold px-6 py-3 rounded-lg transition-all"
-            style={{ borderColor: 'var(--color-accent)', color: 'var(--color-accent)' }}
-            onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'var(--color-accent)'; e.currentTarget.style.color = '#fff'; }}
-            onMouseLeave={e => { e.currentTarget.style.backgroundColor = ''; e.currentTarget.style.color = 'var(--color-accent)'; }}
-          >
-            View All Past Events <ArrowRight size={16} />
-          </Link>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 // ─── Contact Form ─────────────────────────────────────────────────────────────
 function ContactSection() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
@@ -521,7 +371,7 @@ function ContactSection() {
               Reach out and our team will get back to you shortly.
             </p>
 
-            {/* Calendly — Book a Calendar */}
+            {/* Calendly — Book a Call */}
             <button
               type="button"
               onClick={() => setCalendlyOpen(true)}
@@ -530,7 +380,7 @@ function ContactSection() {
               onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--color-accent-hover)')}
               onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'var(--color-accent)')}
             >
-              <Calendar size={18} /> Book a Calendar
+              <Calendar size={18} /> Book a Call
             </button>
 
             <div className="space-y-6">
@@ -712,7 +562,6 @@ export default function Home() {
       <StatsBar />
       <AboutSection />
       <UpcomingEvents />
-      <PastEvents />
       <ContactSection />
     </>
   );
