@@ -73,13 +73,13 @@ export default function About() {
       {/* ── Hero ─────────────────────────────────────────────────────────────── */}
       <section
         className="relative py-28 px-4 text-center overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, var(--color-navy) 0%, var(--color-bg) 100%)' }}
+        style={{
+          backgroundImage:
+            'linear-gradient(135deg, var(--page-hero-c1) 0%, var(--page-hero-c2) 55%, var(--page-hero-c3) 100%), url(https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1600&q=80)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
       >
-        {/* Decorative circle */}
-        <div
-          className="absolute -top-20 -right-20 w-96 h-96 rounded-full opacity-5"
-          style={{ backgroundColor: 'var(--color-accent)' }}
-        />
         <div className="relative max-w-3xl mx-auto">
           <span
             className="inline-block text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5"
@@ -87,8 +87,11 @@ export default function About() {
           >
             About CISOevents
           </span>
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-5 leading-tight" style={{ color: 'var(--color-text)' }}>
-            Where the <span style={{ color: 'var(--color-accent)' }}>CISO Community</span> Comes Together
+          <h1 className="text-4xl md:text-5xl font-extrabold mb-5 leading-tight" style={{ color: 'var(--color-heading)' }}>
+            Where the <span
+              className="text-transparent bg-clip-text"
+              style={{ backgroundImage: 'linear-gradient(90deg, #2563eb 0%, #06b6d4 50%, #0ea5e9 100%)' }}
+            >CISO Community</span> Comes Together
           </h1>
           <p className="text-lg leading-relaxed max-w-2xl mx-auto" style={{ color: 'var(--color-text-muted)' }}>
             CISOevents is a community-first platform producing executive summits, roundtables, and virtual briefings
@@ -305,7 +308,7 @@ export default function About() {
             <Phone size={16} /> +1 (321) 236-2561
           </a>
           <Link
-            to="/#contact"
+            to="/contact"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm border transition-colors"
             style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
           >

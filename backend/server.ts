@@ -526,18 +526,14 @@ interface YouTubePlaylist {
   publishedAt: string;
 }
 
-// ── RSS fallback (no API key needed, returns latest ~15 videos only) ──────────
-async function fetchVideosViaRSS(): Promise<YouTubeVideo[]> {
-  console.log('[YouTube] No API key — falling back to RSS feed');
-  const rssRes = await fetch(
-    `https://www.youtube.com/feeds/videos.xml?channel_id=${YT_CHANNEL_ID}`,
-    { headers: { Accept: 'application/rss+xml, application/xml, text/xml' } },
-  );
-  if (!rssRes.ok) throw new Error(`YouTube RSS returned ${rssRes.status}`);
-  const xml = await rssRes.text();
+// ── RSS helpers ──────────────────────────────────────────────────────────────
+
+function parseRSSEntries(xml: string, fallbackAuthor = 'CISOevents'): YouTubeVideo[] {
   const videos: YouTubeVideo[] = [];
-  for (const match of xml.matchAll(/<entry>([\s\S]*?)<\/entry>/g)) {
-    const e = match[1];
+  const entryRe = /<entry>([\s\S]*?)<\/entry>/g;
+  let m: RegExpExecArray | null;
+  while ((m = entryRe.exec(xml)) !== null) {
+    const e = m[1];
     const videoId = e.match(/<yt:videoId>([^<]+)<\/yt:videoId>/)?.[1];
     if (!videoId) continue;
     const title     = (e.match(/<title>([^<]+)<\/title>/)?.[1] ?? '')
@@ -546,9 +542,43 @@ async function fetchVideosViaRSS(): Promise<YouTubeVideo[]> {
     const desc      = (e.match(/<media:description>([\s\S]*?)<\/media:description>/)?.[1] ?? '').substring(0, 200);
     const thumb     = e.match(/url="(https:\/\/i\.ytimg\.com\/vi\/[^"]+)"/)?.[1]
       ?? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
-    const author    = e.match(/<name>([^<]+)<\/name>/)?.[1] ?? 'CISOevents';
+    const author    = e.match(/<name>([^<]+)<\/name>/)?.[1] ?? fallbackAuthor;
     videos.push({ id: videoId, title, description: desc, thumbnail: thumb, publishedAt: published, url: `https://www.youtube.com/watch?v=${videoId}`, channelTitle: author });
   }
+  return videos;
+}
+
+async function fetchRSSFeed(url: string): Promise<string | null> {
+  try {
+    const res = await fetch(url, { headers: { Accept: 'application/rss+xml, application/xml, text/xml' } });
+    return res.ok ? await res.text() : null;
+  } catch { return null; }
+}
+
+// Known playlist IDs — supplements the channel RSS (which only returns ~15 videos)
+const KNOWN_PLAYLIST_IDS = [
+  'PL7oYSEYWENY6HzHJECx0GNOCuH2YNCxqf', // Startup & Investor Podcast
+  'PL7oYSEYWENY65aHxx_KoX0I9x_86xp-_w', // Horizon Summit AI, Cyber & FinTech
+];
+
+// ── RSS fallback (no API key — fetches channel + known playlists) ─────────────
+async function fetchVideosViaRSS(): Promise<YouTubeVideo[]> {
+  console.log('[YouTube] No API key — falling back to multi-RSS');
+  const feeds = await Promise.all([
+    fetchRSSFeed(`https://www.youtube.com/feeds/videos.xml?channel_id=${YT_CHANNEL_ID}`),
+    ...KNOWN_PLAYLIST_IDS.map(id =>
+      fetchRSSFeed(`https://www.youtube.com/feeds/videos.xml?playlist_id=${id}`)
+    ),
+  ]);
+  const seen = new Set<string>();
+  const videos: YouTubeVideo[] = [];
+  for (const xml of feeds) {
+    if (!xml) continue;
+    for (const v of parseRSSEntries(xml)) {
+      if (!seen.has(v.id)) { seen.add(v.id); videos.push(v); }
+    }
+  }
+  videos.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
   return videos;
 }
 
@@ -719,19 +749,91 @@ app.get('/api/youtube/playlists', async (_req: Request, res: Response) => {
   }
 });
 
-// GET /api/youtube/playlist/:id — videos inside a playlist (requires API key)
-app.get('/api/youtube/playlist/:id', async (req: Request, res: Response) => {
+// GET /api/youtube/podcasts — all channel playlists (API v3 or hardcoded fallback)
+// YouTube podcasts are standard playlists; this endpoint returns all so the
+// front-end can display them as tabs without hardcoding IDs.
+app.get('/api/youtube/podcasts', async (_req: Request, res: Response) => {
+  const FALLBACK_PLAYLISTS: YouTubePlaylist[] = [
+    {
+      id: 'PL7oYSEYWENY6HzHJECx0GNOCuH2YNCxqf',
+      title: 'Startup & Investor Podcast',
+      description: 'Founders, investors and operators share what it really takes to build in cybersecurity.',
+      thumbnail: `https://i.ytimg.com/vi/placeholder/hqdefault.jpg`,
+      itemCount: 0,
+      publishedAt: '',
+    },
+    {
+      id: 'PL7oYSEYWENY65aHxx_KoX0I9x_86xp-_w',
+      title: 'Horizon Summit Series',
+      description: 'In-depth conversations recorded live at the Horizon Summit gatherings.',
+      thumbnail: `https://i.ytimg.com/vi/placeholder/hqdefault.jpg`,
+      itemCount: 0,
+      publishedAt: '',
+    },
+  ];
+
   if (!YT_API_KEY) {
-    return res.json({ ok: true, videos: [], total: 0, note: 'YOUTUBE_API_KEY not set — playlist items unavailable' });
+    return res.json({ ok: true, playlists: FALLBACK_PLAYLISTS, total: FALLBACK_PLAYLISTS.length, source: 'fallback' });
   }
+
+  const cacheKey = `yt_podcasts_${YT_CHANNEL_ID}`;
+  const cached = cacheGet<YouTubePlaylist[]>(cacheKey);
+  if (cached) return res.json({ ok: true, playlists: cached, total: cached.length, cached: true, source: 'cache' });
+
+  try {
+    const all = await fetchAllPlaylists();
+    // Return all playlists — the front-end can filter if needed
+    cacheSet(cacheKey, all, 60 * 60_000); // 1 h
+    res.json({ ok: true, playlists: all, total: all.length, cached: false, source: 'api' });
+  } catch (err) {
+    console.warn('[YouTube podcasts] API failed, returning fallback:', err);
+    res.json({ ok: true, playlists: FALLBACK_PLAYLISTS, total: FALLBACK_PLAYLISTS.length, source: 'fallback' });
+  }
+});
+
+// GET /api/youtube/playlist/:id — videos inside a playlist (API key, with RSS fallback)
+app.get('/api/youtube/playlist/:id', async (req: Request, res: Response) => {
   const id = String(req.params.id);
   const cacheKey = `yt_playlist_items_${id}`;
   const cached = cacheGet<YouTubeVideo[]>(cacheKey);
   if (cached) return res.json({ ok: true, videos: cached, total: cached.length, cached: true });
   try {
-    const videos = await fetchPlaylistVideos(id);
+    let videos: YouTubeVideo[];
+    let source: string;
+
+    if (YT_API_KEY) {
+      try {
+        videos = await fetchPlaylistVideos(id);
+        source = 'api';
+      } catch (apiErr) {
+        console.warn('[YouTube] Playlist API failed, falling back to RSS:', apiErr);
+        const xml = await fetchRSSFeed(`https://www.youtube.com/feeds/videos.xml?playlist_id=${id}`);
+        videos = xml ? parseRSSEntries(xml) : [];
+        // If playlist RSS is empty too, fall back to channel feed
+        if (videos.length === 0 && YT_CHANNEL_ID) {
+          const chanXml = await fetchRSSFeed(`https://www.youtube.com/feeds/videos.xml?channel_id=${YT_CHANNEL_ID}`);
+          videos = chanXml ? parseRSSEntries(chanXml) : [];
+          source = 'rss-channel-fallback';
+        } else {
+          source = 'rss-fallback';
+        }
+      }
+    } else {
+      // No API key — try playlist-specific RSS first, then channel RSS
+      const xml = await fetchRSSFeed(`https://www.youtube.com/feeds/videos.xml?playlist_id=${id}`);
+      videos = xml ? parseRSSEntries(xml) : [];
+      if (videos.length === 0 && YT_CHANNEL_ID) {
+        console.log(`[YouTube] Playlist RSS empty for ${id}, falling back to channel RSS`);
+        const chanXml = await fetchRSSFeed(`https://www.youtube.com/feeds/videos.xml?channel_id=${YT_CHANNEL_ID}`);
+        videos = chanXml ? parseRSSEntries(chanXml) : [];
+        source = 'rss-channel';
+      } else {
+        source = 'rss';
+      }
+    }
+
     cacheSet(cacheKey, videos, 60 * 60_000); // 1 h
-    res.json({ ok: true, videos, total: videos.length, cached: false });
+    res.json({ ok: true, videos, total: videos.length, cached: false, source });
   } catch (err) {
     console.error('[YouTube playlist items error]', err);
     res.status(502).json({ ok: false, error: String(err) });

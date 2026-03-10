@@ -12,9 +12,13 @@ dist
 dist-ssr
 *.local
 
-# Environment / secrets
+# Environment / secrets — never commit real keys
 .env
+.env.local
+.env.production.local
 backend/.env
+backend/.env.production
+backend/.env.local
 
 # Editor directories and files
 .vscode/*

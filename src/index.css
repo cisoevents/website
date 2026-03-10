@@ -5,24 +5,65 @@
 @tailwind utilities;
 
 /* ═══════════════════════════════════════════════════════════════════
-   THEME — Dark Navy + Electric Blue (locked)
+   THEME TOKENS — Light (default) + Dark
    ═══════════════════════════════════════════════════════════════════ */
 
 :root {
-  --color-bg: #0A0E1A;
-  --color-bg-alt: #0D1321;
+  /* Light theme palette — bright, clean, and slightly warm */
+  --color-bg: #f7f9fc;
+  --color-bg-alt: #ffffff;
+  --color-surface: #ffffff;
+  --color-dark-bg: #e7edf5;
+  --color-darker-bg: #d7e0ec;
+  --color-heading: #0b1220;
+  --color-accent: #2563eb;
+  --color-accent-hover: #1d4ed8;
+  /* Softer green for light sections */
+  --color-accent2: #0fa968;
+  --color-text: #1f2937;
+  --color-text-muted: #475569;
+  --color-text-dim: #64748b;
+  --color-border: rgba(12, 18, 32, 0.1);
+  --color-border-light: rgba(12, 18, 32, 0.06);
+  --color-accent-5: rgba(37, 99, 235, 0.06);
+  --color-accent-10: rgba(37, 99, 235, 0.12);
+  --color-accent-20: rgba(37, 99, 235, 0.2);
+  --color-accent-30: rgba(37, 99, 235, 0.3);
+  --color-accent2-5: rgba(15, 169, 104, 0.08);
+  --color-hover-5: rgba(37, 99, 235, 0.05);
+  --color-hover-10: rgba(37, 99, 235, 0.1);
+  --color-nav-bg: rgba(255, 255, 255, 0.95);
+  --color-grid: rgba(37, 99, 235, 0.02);
+  --color-gradient-start: #f7f9fc;
+  --color-gradient-end: #e7edf5;
+
+  /* Overlays for imagery (light default) */
+  --hero-overlay: rgba(0, 0, 0, 0.58);
+  --hero-tint: rgba(37, 99, 235, 0.18);
+  --about-overlay-1: rgba(6, 10, 20, 0.82);
+  --about-overlay-2: rgba(0, 0, 0, 0.62);
+
+  /* Section/page hero overlays — light mode: white wash so bg photo shows subtly */
+  --page-hero-c1: rgba(247, 249, 252, 0.92);
+  --page-hero-c2: rgba(231, 237, 245, 0.90);
+  --page-hero-c3: rgba(37, 99, 235, 0.10);
+}
+
+[data-theme="dark"] {
+  --color-bg: #0a0e1a;
+  --color-bg-alt: #0d1321;
   --color-surface: #111827;
-  --color-dark-bg: #060A14;
+  --color-dark-bg: #060a14;
   --color-darker-bg: #040712;
-  --color-heading: #FFFFFF;
-  --color-accent: #00A8FF;
-  --color-accent-hover: #3BBFFF;
-  --color-accent2: #00D4FF;
-  --color-text: #CBD5E1;
-  --color-text-muted: #94A3B8;
-  --color-text-dim: #64748B;
-  --color-border: rgba(255,255,255,0.1);
-  --color-border-light: rgba(255,255,255,0.05);
+  --color-heading: #ffffff;
+  --color-accent: #00a8ff;
+  --color-accent-hover: #3bbfff;
+  --color-accent2: #00d4ff;
+  --color-text: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-text-dim: #64748b;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-light: rgba(255, 255, 255, 0.05);
   --color-accent-5: rgba(0, 168, 255, 0.05);
   --color-accent-10: rgba(0, 168, 255, 0.1);
   --color-accent-20: rgba(0, 168, 255, 0.2);
@@ -32,25 +73,32 @@
   --color-hover-10: rgba(59, 191, 255, 0.1);
   --color-nav-bg: rgba(10, 14, 26, 0.95);
   --color-grid: rgba(0, 168, 255, 0.03);
-  --color-gradient-start: #0A0E1A;
-  --color-gradient-end: #0D1830;
+  --color-gradient-start: #0a0e1a;
+  --color-gradient-end: #0d1830;
+
+  /* Overlays for imagery (dark) */
+  --hero-overlay: rgba(0, 0, 0, 0.65);
+  --hero-tint: rgba(0, 168, 255, 0.22);
+  --about-overlay-1: rgba(6, 10, 20, 0.82);
+  --about-overlay-2: rgba(0, 0, 0, 0.6);
+
+  /* Section/page hero overlays — dark mode: deep dark tint so photo still shows */
+  --page-hero-c1: rgba(6, 12, 26, 0.88);
+  --page-hero-c2: rgba(10, 18, 38, 0.85);
+  --page-hero-c3: rgba(0, 168, 255, 0.30);
 }
 
-/* ═══════════════════════════════════════════════════════════════════
-   GLOBAL OVERRIDES for dark theme
-   ═══════════════════════════════════════════════════════════════════ */
 body {
   background-color: var(--color-bg) !important;
   color: var(--color-text) !important;
 }
 
-/* Background overrides */
+/* Tailwind palette overrides routed through theme tokens */
 .bg-white { background-color: var(--color-surface) !important; }
 .bg-gray-50 { background-color: var(--color-bg-alt) !important; }
 .bg-gray-100 { background-color: var(--color-dark-bg) !important; }
 .bg-gray-900 { background-color: var(--color-darker-bg) !important; }
 
-/* Text overrides */
 .text-gray-700 { color: var(--color-text) !important; }
 .text-gray-600 { color: var(--color-text) !important; }
 .text-gray-500 { color: var(--color-text-muted) !important; }
@@ -59,42 +107,34 @@ body {
 .text-gray-800 { color: var(--color-heading) !important; }
 .text-gray-900 { color: var(--color-heading) !important; }
 
-/* Border overrides */
 .border-gray-50 { border-color: var(--color-border-light) !important; }
 .border-gray-100 { border-color: var(--color-border) !important; }
 .border-gray-200 { border-color: var(--color-border) !important; }
 .border-gray-300 { border-color: var(--color-border) !important; }
 
-/* Hover bg overrides */
 .hover\:bg-gray-50:hover { background-color: var(--color-bg-alt) !important; }
 .hover\:bg-gray-100:hover { background-color: var(--color-dark-bg) !important; }
 .hover\:bg-gray-200:hover { background-color: var(--color-surface) !important; }
 .hover\:text-gray-900:hover { color: var(--color-heading) !important; }
 .hover\:text-gray-600:hover { color: var(--color-text) !important; }
 
-/* Divide overrides */
 .divide-gray-100 > * + * { border-color: var(--color-border) !important; }
 
-/* Ring overrides */
 .ring-white { --tw-ring-color: var(--color-surface) !important; }
 
-/* Shadow on cards */
-.shadow-sm { box-shadow: 0 1px 3px rgba(0,0,0,0.3) !important; }
-.shadow-md { box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important; }
+.shadow-sm { box-shadow: 0 1px 3px rgba(0,0,0,0.12) !important; }
+.shadow-md { box-shadow: 0 4px 12px rgba(0,0,0,0.18) !important; }
 
-/* White/10 overlay adjustments */
 .bg-white\/10 { background-color: rgba(255,255,255,0.08) !important; }
 .bg-white\/20 { background-color: rgba(255,255,255,0.12) !important; }
 
-/* Scrollbar for dark theme */
 ::-webkit-scrollbar-track { background: var(--color-dark-bg) !important; }
 ::-webkit-scrollbar-thumb { background: var(--color-accent) !important; }
 
-/* Form input overrides */
 .form-input {
-  background-color: var(--color-dark-bg) !important;
+  background-color: var(--color-surface) !important;
   border-color: var(--color-border) !important;
-  color: var(--color-heading) !important;
+  color: var(--color-text) !important;
 }
 .form-input::placeholder {
   color: var(--color-text-dim) !important;
@@ -233,6 +273,14 @@ body {
 ::-webkit-scrollbar-thumb {
   background: var(--color-accent, #1F2D3C);
   border-radius: 3px;
+}
+
+/* Theme-aware logo: original in light, white in dark */
+.logo-themed {
+  filter: none;
+}
+[data-theme="dark"] .logo-themed {
+  filter: brightness(0) invert(1);
 }
 
 /* Toast animations */

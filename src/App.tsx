@@ -6,6 +6,7 @@ import { AppProvider, useApp } from './context/AppContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Toast from './components/Toast';
+import CalendlyModal from './components/CalendlyModal';
 
 // Public pages
 import Home from './pages/Home';
@@ -15,6 +16,8 @@ import Gallery from './pages/Gallery';
 import About from './pages/About';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import FAQ from './pages/FAQ';
+import Contact from './pages/Contact';
+import Podcasts from './pages/Podcasts';
 
 // Admin pages
 import AdminLogin from './pages/admin/AdminLogin';
@@ -70,6 +73,8 @@ function AppRoutes() {
       <Route path="/about" element={<PublicLayout><About /></PublicLayout>} />
       <Route path="/privacy" element={<PublicLayout><PrivacyPolicy /></PublicLayout>} />
       <Route path="/faq" element={<PublicLayout><FAQ /></PublicLayout>} />
+      <Route path="/contact" element={<PublicLayout><Contact /></PublicLayout>} />
+      <Route path="/podcasts" element={<PublicLayout><Podcasts /></PublicLayout>} />
 
       {/* Admin */}
       <Route path="/admin" element={<AdminLogin />} />
@@ -95,6 +100,7 @@ export default function App() {
       <AppProvider>
         <AppRoutes />
         <Toast />
+        <CalendlyModal />
       </AppProvider>
     </BrowserRouter>
   );

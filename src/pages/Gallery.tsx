@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useCallback } from 'react';
+﻿﻿import { useState, useEffect, useCallback } from 'react';
 import { Youtube, ChevronLeft, ChevronRight, ExternalLink, RefreshCw, Play, ListVideo } from 'lucide-react';
 
 // â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -22,8 +22,17 @@ interface YouTubePlaylist {
 }
 
 // â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-const VIDEOS_PER_PAGE = 8;
+const VIDEOS_PER_PAGE = 16;
 const API_BASE = (import.meta.env.VITE_API_URL as string | undefined)?.trim() || 'https://backend-website-mu.vercel.app';
+
+// Playlists that belong on the Podcasts page — hidden from Gallery tabs
+const PODCAST_PLAYLIST_IDS = new Set([
+  'PL7oYSEYWENY6HzHJECx0GNOCuH2YNCxqf', // Horizon Startup & Investor PodCast
+  'PL7oYSEYWENY65aHxx_KoX0I9x_86xp-_w', // Horizon Summit AI, Cyber & FinTech
+]);
+
+// Exclude investor/startup/podcast videos from the Gallery — they belong on the Podcasts page
+const GALLERY_EXCLUDE = /investor|startup|\bpodcast\b/i;
 
 // â”€â”€ Hooks â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function useYouTubeVideos() {
@@ -182,13 +191,19 @@ function VideoCard({ video, onClick }: { video: YouTubeVideo; onClick: () => voi
 
 // â”€â”€ Main Gallery Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function Gallery() {
-  const { videos: allVideos, loading: allLoading, error: allError, refresh } = useYouTubeVideos();
+  const { videos: rawAllVideos, loading: allLoading, error: allError, refresh } = useYouTubeVideos();
   const playlists = usePlaylists();
   const [selectedPlaylist, setSelectedPlaylist] = useState<string | null>(null);
-  const { videos: playlistVideos, loading: plLoading, error: plError } = usePlaylistVideos(selectedPlaylist);
+  const { videos: rawPlaylistVideos, loading: plLoading, error: plError } = usePlaylistVideos(selectedPlaylist);
 
   const [page, setPage]       = useState(1);
   const [activeVideo, setActiveVideo] = useState<YouTubeVideo | null>(null);
+
+  // Strip podcast/investor content from gallery
+  const allVideos     = rawAllVideos.filter(v => !GALLERY_EXCLUDE.test(v.title));
+  const playlistVideos = rawPlaylistVideos.filter(v => !GALLERY_EXCLUDE.test(v.title));
+  // Only show non-podcast playlists in tab filters
+  const galleryPlaylists = playlists.filter(pl => !PODCAST_PLAYLIST_IDS.has(pl.id));
 
   const videos  = selectedPlaylist ? playlistVideos : allVideos;
   const loading = selectedPlaylist ? plLoading : allLoading;
@@ -209,7 +224,10 @@ export default function Gallery() {
       <div
         className="py-16 relative overflow-hidden"
         style={{
-          background: 'linear-gradient(135deg, var(--color-dark-bg) 0%, var(--color-bg) 100%)',
+          backgroundImage:
+            'linear-gradient(135deg, var(--page-hero-c1) 0%, var(--page-hero-c2) 55%, var(--page-hero-c3) 100%), url(https://i.pinimg.com/originals/5c/c6/2f/5cc62fdae848f7fde375a320265a1c9b.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           borderBottom: '1px solid var(--color-border)',
         }}
       >
@@ -238,6 +256,9 @@ export default function Gallery() {
             <p className="font-semibold text-sm" style={{ color: 'var(--color-heading)' }}>Horizon Summit</p>
             <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
               {allVideos.length > 0 ? `${allVideos.length} videos` : 'Latest videos from our YouTube channel'}
+              {rawAllVideos.length > allVideos.length && (
+                <span className="ml-1 opacity-60">(filtered)</span>
+              )}
             </p>
           </div>
           <div className="ml-auto flex items-center gap-2">
@@ -264,7 +285,7 @@ export default function Gallery() {
         </div>
 
         {/* Playlist filter tabs */}
-        {playlists.length > 0 && (
+        {galleryPlaylists.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-8">
             <button
               onClick={() => selectFilter(null)}
@@ -278,7 +299,7 @@ export default function Gallery() {
               All Videos
               <span className="text-xs opacity-70">({allVideos.length})</span>
             </button>
-            {playlists.map(pl => (
+            {galleryPlaylists.map(pl => (
               <button
                 key={pl.id}
                 onClick={() => selectFilter(pl.id)}

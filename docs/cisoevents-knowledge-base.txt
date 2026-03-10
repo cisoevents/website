@@ -1,195 +1,664 @@
-================================================================
-CISOEVENTS — KNOWLEDGE BASE TRAINING FILE
-Last Updated: March 2026
-================================================================
-Use this file to train your chatbot / knowledge base (Tawk.to, 
-Tidio, Intercom, etc.). Each Q&A block is self-contained.
-================================================================
+﻿CISOevents - Comprehensive Knowledge Base
+For chatbot training, AI assistants, and internal reference.
+Last compiled: March 9, 2026
+Sources: cisoevents.com, lu.ma/cisoevents, youtube.com/@horizonsummit
+Note: Event listings, speaker rosters, and sponsor details change per event. Always direct users to https://lu.ma/cisoevents for current event data.
 
+===============================================================
+TABLE OF CONTENTS
+===============================================================
+1. Organization Overview
+2. Mission, Values & Philosophy
+3. Event Formats
+4. Upcoming Events
+5. Past Events
+6. Speakers
+7. Event Format & Session Types
+8. Sponsors & Partners
+9. Podcasts & Video Content
+10. Registration & Tickets
+11. Speaking Applications
+12. Sponsorship
+13. Payment Policy
+14. Refund & Transfer Policy
+15. Code of Conduct
+16. Force Majeure Policy
+17. Privacy Policy Summary
+18. Contact & Support
+19. Social Media & Links
+20. FAQ - Full Q&A
+21. Quick Reference
 
-----------------------------------------------------------------
-CATEGORY: ABOUT CISOEVENTS
-----------------------------------------------------------------
+===============================================================
+1. ORGANIZATION OVERVIEW
+===============================================================
+
+Name: CISOevents
+Operated by: Neptune Media LLC
+Legal entity: Wyoming-registered company, Wyoming 82801, USA
+Website: https://cisoevents.com
+Event registration platform: https://lu.ma/cisoevents
+YouTube channel: https://www.youtube.com/@horizonsummit
+Booking / Scheduling: https://calendly.com/cisoevents
+Privacy Policy: https://cisoevents.com/privacy
+Code of Conduct: https://cisoevents.com/coc
+
+What is CISOevents?
+CISOevents is a premier event series and community platform connecting cybersecurity and AI leaders - Chief Information Security Officers (CISOs), CIOs, VPs of Security, investors, and startup founders - through curated summits, executive dinners, roundtables, and networking events worldwide.
+
+Who attends?
+CISOevents is designed exclusively for senior cybersecurity and technology professionals. Typical attendees include:
+- CISOs (Chief Information Security Officers)
+- Deputy CISOs and VPs of Security
+- CIOs and CTOs
+- Security engineers and architects (senior level)
+- Cybersecurity investors and venture capitalists
+- Startup founders in cybersecurity and AI
+
+Key Statistics:
+- 500+ Security Leaders engaged
+- 50+ Events Hosted
+- 30+ Cities Reached
+- 10+ Years of Experience
+
+===============================================================
+2. MISSION, VALUES & PHILOSOPHY
+===============================================================
+
+Mission Statement:
+CISOevents exists to create a trusted space where security leaders can speak candidly, learn from peers, and shape the future of the industry - without vendor pressure or marketing noise.
+
+Philosophy:
+"The best security conversations happen when the room is full of practitioners who've actually done the work - not people trying to sell something."
+
+Core Values:
+
+1. Peer-Led Conversations
+Sessions are candid and off-record by default, creating a safe space for honest discussion. No sales pitches, no product demos.
+
+2. Vetted Community
+Attendance is curated. We review attendees to ensure the right people are in the room - qualified security professionals who add value to conversation.
+
+3. Practitioner Speakers Only
+All speakers are active practitioners - CISOs, Deputy CISOs, VPs of Security, or equivalent. We do not allow vendor marketers or sales representatives to present.
+
+4. National Reach
+Events span San Francisco, New York, Chicago, Toronto, London, and regional cities - building a truly national and international network.
+
+5. Vendor-Neutral
+CISOevents does not endorse products, services, or sponsors. Our platform is designed to benefit practitioners first.
+
+6. Operated by Neptune Media LLC
+CISOevents is a Neptune Media company. Neptune Media operates across 30+ media markets.
+
+===============================================================
+3. EVENT FORMATS
+===============================================================
+
+CISOevents runs three primary event formats:
+
+HORIZON SUMMIT (Flagship Annual Event)
+- Scale: 150-250 CISOs and security executives
+- Duration: Full day (sometimes two days)
+- Format: Keynotes, expert panels, roundtable discussions, hands-on workshops, networking dinner
+- Purpose: The flagship annual gathering for the cybersecurity community - big ideas, deep conversations, strategic networking
+- Typical ticket types: General Admission, VIP (includes lunch and dinner)
+
+ROUNDTABLES (Invite-Only Executive Dinners)
+- Scale: 15-25 senior security leaders
+- Format: Small-group discussion over lunch or dinner; no slides, no demos, no vendor presentations
+- Atmosphere: Off-the-record by default; focused on candid peer exchange
+- Selection: Attendance by invitation only; curated by CISOevents team
+
+VIRTUAL BRIEFINGS
+- Format: Short-form online sessions covering emerging threats, regulatory shifts, or breaking cybersecurity news
+- Audience: Open to broader security community
+- Duration: Typically 60-90 minutes
+- Access: Virtual attendance via link provided upon registration
+
+===============================================================
+4. UPCOMING EVENTS
+===============================================================
+
+Live event data: Always check https://lu.ma/cisoevents for the current, up-to-date event calendar. Events are added on a rolling basis.
+
+EVENT: Autharva | CISOevents Present: AI Agents, Identity & Accountability - The New CISO Playbook
+- Date: Monday, March 23, 2026
+- Time: 5:00 PM - 8:30 PM PDT
+- Location: AWS Builder Loft, 525 Market St, San Francisco, CA 94105
+- Context: During RSA Week 2026
+- Registration: Approval required - https://luma.com/iuutm274
+- Hosted by: Charles Payne (CISOevents), Ashley Brown (Autharva), Rick McElroy
+- Target Audience: CISOs, Security Architects, GRC Professionals, Legal Counsel
+- Format: Four-part panel discussion covering AI agent security, identity, accountability, and governance
+
+Panel Topics:
+1. Architecture - Why AI broke the cloud cost model; new infrastructure components
+2. Legal - Do's and Don'ts for a CISO in the world of AI agents
+3. GRC - If AI is audited tomorrow, would you pass? New compliance requirements
+4. CISO - Who is the ultimate beneficiary of agentic actions? Accountability in the AI lifecycle
+
+For all upcoming events, visit: https://lu.ma/cisoevents
+
+===============================================================
+5. PAST EVENTS
+===============================================================
+
+Past event recordings are available on YouTube at https://www.youtube.com/@horizonsummit and in the Gallery at https://cisoevents.com/gallery.
+
+2024 NYC Horizon Summit (June 2024)
+- Location: New York City, USA
+- Format: Horizon Summit - AI, Cybersecurity & FinTech
+- Notable Sessions: Dune Security showcase; startup investor pitches; CISO roundtable
+- Recording: Available on YouTube (@horizonsummit) - playlist: "Previous NYC Horizon Summit's"
+
+2024 Horizon Summit - Investor & Startup Sessions
+- Format: Investor pitch sessions and startup showcases
+- Featured Companies: Bazarr (investor pitch), FlexBlok, StartupBrite
+- Recording: Available on YouTube (@horizonsummit)
+
+2024 Virtual Lunch & Learn Roundtable
+- Format: Virtual roundtable - CxO Insyte series
+- Audience: CxO-level security professionals
+- Recording: Available on YouTube (@horizonsummit)
+
+2024 Cybersecurity Marketing Society Event
+- Format: Panel / networking event
+- Recording: Available on YouTube (@horizonsummit)
+
+Full archive: https://www.youtube.com/@horizonsummit - playlist "Previous NYC Horizon Summit's"
+
+===============================================================
+6. SPEAKERS
+===============================================================
+
+CISOevents features exclusively active practitioners - CISOs, Deputy CISOs, VPs of Security, and equivalent senior security leaders. No vendor marketing representatives.
+
+CONFIRMED SPEAKERS & HOSTS:
+
+Charles Payne
+- Title: CISO and CTO
+- Company: Neptune Media (30+ media markets)
+- Role: Founder of CISOevents; frequent host and moderator at Horizon Summit events
+- LinkedIn: https://linkedin.com/in/nylcharlespayne
+
+Ashley Brown
+- Company: Autharva
+- Role: Co-host, "AI Agents, Identity & Accountability" panel (RSA Week 2026)
+
+Rick McElroy
+- Role: Co-host, "AI Agents, Identity & Accountability" panel (RSA Week 2026)
+
+Josh Bruyning
+- Company: Security Market Watch
+- Role: Appeared alongside Charles Payne in investment and communication-focused sessions (2024)
+
+Note: Speaker rosters vary by event. For confirmed speakers at a specific event, see the event listing on Luma.
+
+HOW TO APPLY AS A SPEAKER:
+Email charlesp@cisoevents.com with:
+- Full name and title
+- Company name
+- Topic idea / abstract
+- Brief bio
+
+Active practitioners only. No vendor pitches or product presentations permitted.
+Our team reviews all applications and responds within 2 business days.
+
+===============================================================
+7. EVENT FORMAT & SESSION TYPES
+===============================================================
+
+Specific agendas are published per event on Luma. The following describes typical session types at Horizon Summit events.
+
+TYPICAL SESSION TYPES:
+- Keynote: Headline presentations by senior security practitioners on strategic topics
+- Panel Discussion: Multi-speaker panels on focused cybersecurity themes (AI, Zero Trust, GRC, etc.)
+- Startup Pitch / Showcase: Curated startup founders present to CISO and investor audience
+- Investor Discussion: VC and investor panels on the state of cybersecurity funding
+- Roundtable: Small-group off-record discussions (invite-only format)
+- Fireside Chat: Informal one-on-one or small-group conversations with practitioners
+- Networking Dinner: VIP dinner for in-depth relationship building
+- Virtual Roundtable: Online lunch & learn format (CxO Insyte series and similar)
+
+RECURRING THEMES (based on past events):
+- AI and cybersecurity convergence
+- Identity and access management
+- AI agent governance and accountability
+- Startup and investor ecosystems in cybersecurity
+- CISO career and leadership development
+- GRC, compliance, and audit readiness
+- Cloud security and infrastructure
+
+For the agenda of a specific upcoming event, see: https://lu.ma/cisoevents
+
+===============================================================
+8. SPONSORS & PARTNERS
+===============================================================
+
+Sponsorship does not imply CISOevents endorsement of the sponsor's products or services. Sponsor rosters vary by event.
+
+KNOWN PARTNERS & FEATURED COMPANIES:
+The following companies have appeared at or been featured in CISOevents productions:
+- Autharva - AI agent governance and security platform (co-presenter, RSA Week 2026)
+- Jugl - Enterprise AI and workflow platform (featured in Horizon Summit content)
+- Dune Security - Featured at 2024 NYC Horizon Summit
+- StartupBrite - Featured at Horizon Summit pitch sessions
+- Bazarr - Featured in 2024 investor pitch sessions
+- FlexBlok - Featured at 2024 Horizon Summit
+- CxO Insyte - Virtual roundtable series partner
+
+Sponsorship Non-Exclusivity:
+Use of a sponsor's name or logo in event materials does not constitute CISOevents endorsement of the sponsor or its products, services, or programs. CISOevents does not offer or imply exclusive relationships with any sponsor.
+
+To become a sponsor: email charlesp@cisoevents.com or call +1 (321) 236-2561
+
+===============================================================
+9. PODCASTS & VIDEO CONTENT
+===============================================================
+
+YouTube Channel: https://www.youtube.com/@horizonsummit
+Channel name: Horizon Summit
+
+YOUTUBE PLAYLISTS:
+
+1. Horizon Startup & Investor Podcast
+   Playlist ID: PL7oYSEYWENY6HzHJECx0GNOCuH2YNCxqf
+   Focus: Founders, investors, startup journeys, building in cybersecurity, VC perspectives
+   Format: Conversational interviews with cybersecurity startup founders and investors
+
+2. Horizon Summit | An AI, Cybersecurity & FinTech Summit
+   Playlist ID: PL7oYSEYWENY65aHxx_KoX0I9x_86xp-_w
+   Focus: Recorded sessions from live Horizon Summit events
+   Format: Panel recordings, keynote highlights, fireside chats, startup pitches
+
+3. Previous NYC Horizon Summits
+   Playlist ID: PL7oYSEYWENY4_iIEUkDoy5E-noxQ5VoBJ
+   Focus: Archive of past New York City Horizon Summit recordings
+
+4. The Best of CES 2024 (hosted by TECH1MEDIA)
+   Playlist ID: PL7oYSEYWENY5n-TZNmAdOd5jfRhE9Rj9m
+   Focus: CES 2024 coverage hosted by the Neptune Media / TECH1MEDIA team
+
+RECENT VIDEO TITLES (2024-2025):
+- Horizon Summit Investment Pitch Session
+- 2024 JUNE NYC Horizon Summit | Dune Security
+- CISOevents' Horizon Summit featuring FlexBlok
+- Jugl Startup Benefits
+- Why the Horizon Summit is a Must Attend Event
+- Neptune Media's Charles Payne & Security Market Watch's Josh Bruyning - Investment & Communication
+- 2024 Horizon Summit | Investor Podcast | Bazarr Investor Pitch
+- 2024 Virtual Lunch & Learn Round Table | CxO Insyte
+- 2024 Cybersecurity Marketing Society
+
+WHERE TO FIND RECORDINGS:
+- YouTube: https://www.youtube.com/@horizonsummit
+- Website Gallery: https://cisoevents.com/gallery
+- Podcasts Page: https://cisoevents.com/podcasts
+
+===============================================================
+10. REGISTRATION & TICKETS
+===============================================================
+
+HOW TO REGISTER:
+All event registrations are handled through Luma, our official registration platform.
+1. Go to https://lu.ma/cisoevents or click "Register Now" on any event listing
+2. You will be redirected to the Luma platform
+3. Complete registration on Luma
+4. Confirmation is sent by Luma directly to your email
+
+You can also subscribe to our event calendar via iCal or Google Calendar on the Events page - it auto-updates when new events are added.
+
+TICKET TYPES:
+- General Admission: Standard access to all sessions and networking areas
+- VIP: Includes lunch and dinner in addition to general access
+- Virtual (select events): Remote attendance option when available - check each event listing
+
+PRICING:
+Pricing varies per event. Some events are free with approval; others are paid. Always check the specific event listing on Luma for accurate pricing. Walk-in attendance is available at the Full Retail Rate (if seats remain).
+
+WHO CAN ATTEND:
+CISOevents are designed for senior cybersecurity and technology professionals. Vendor sales representatives may attend as general participants, but cannot present or run demos.
+
+VIRTUAL ATTENDANCE:
+Selected events offer virtual attendance or live streams. Each event listing will indicate whether a virtual option is available. Keynote recordings are typically published on YouTube after the event.
+
+===============================================================
+11. SPEAKING APPLICATIONS
+===============================================================
+
+REQUIREMENTS:
+- Must be an active practitioner: CISO, Deputy CISO, VP of Security, Security Director, or equivalent senior security leadership role
+- No vendor presentations, product pitches, or sales content - strictly prohibited
+- Topic must be practitioner-focused and relevant to the security community
+
+HOW TO APPLY:
+Email charlesp@cisoevents.com with:
+1. Your full name
+2. Job title and company
+3. Topic idea or brief abstract
+4. Short biography
+
+Our team reviews all applications and will follow up within 2 business days.
+
+CONTENT GUIDELINES:
+- Sessions should focus on real-world experiences and lessons learned
+- Presentations are peer-level, not instructional marketing
+- Roundtable speaking requires a smaller audience of 15-25 peers; panel discussion format
+
+===============================================================
+12. SPONSORSHIP
+===============================================================
+
+WHO SHOULD SPONSOR:
+- Cybersecurity technology vendors
+- Venture capital firms and investors
+- Enterprise brands and consulting firms
+- AI and emerging technology companies
+
+SPONSORSHIP TIERS:
+- Platinum: Maximum visibility - large logo placement, dedicated exhibit space, speaking slot inclusion, exclusive dinner sponsorship option, front-of-room presence
+- Gold: Standard exhibit table, panel participation option, digital and printed logo placement
+- Silver: Logo placement on printed and digital materials, website listing
+- Custom: Contact us to discuss bespoke packages including roundtable hosting, startup showcase sponsorship, or content production
+
+ADDITIONAL OPPORTUNITIES:
+- Startup showcase segments and investor pitch sponsorships (curated by application)
+- Networking dinner/reception exclusive sponsorships
+- Workshop and session hosting
+
+LOGO & MATERIALS DEADLINE:
+All sponsor logos and required materials must be submitted at least 30 days before the event.
+- Logos submitted by the deadline: printed materials, on-screen event graphics, digital materials, website, and social media
+- Logos submitted after the deadline: website and social media only
+- Required file formats: AI, EPS, or SVG preferred - high-resolution PNG accepted if no vector file exists
+
+TO GET THE SPONSORSHIP DECK:
+Email charlesp@cisoevents.com or call +1 (321) 236-2561
+
+===============================================================
+13. PAYMENT POLICY
+===============================================================
+
+Preferred Payment Method: ACH or wire transfer (strongly preferred)
+
+Terms:
+- Net 15 available for Accounts Payable departments
+- Credit card accepted as a last resort; processing fees may apply
+
+Payment Deadline:
+Full payment must be received at least 75 days before the event date. Failure to pay by this deadline may result in cancellation of the sponsorship agreement without refund of any deposit paid.
+
+Invoice & Contract:
+Full terms and conditions are provided in the Sponsorship Agreement upon signing. Key terms include:
+- Sponsor trademark usage policy
+- Production timeline and logo deadlines
+- Payment terms (ACH/wire, Net 15)
+- Non-exclusivity clause
+- Force majeure provisions
+
+Contact charlesp@cisoevents.com to request a copy of the full agreement.
+
+===============================================================
+14. REFUND & TRANSFER POLICY
+===============================================================
+
+Ticket Refund Policy:
+- All ticket sales are non-refundable
+- No exceptions for schedule conflicts, travel issues, or other personal reasons
+
+Transfer Policy:
+- Ticket transfers are permitted under specific conditions:
+  - Transfer must be requested at least 5 days before the event
+  - Replacement attendee must be of equal or greater professional seniority
+  - Example: A CISO ticket can be transferred to another CISO or VP of Security - not to a junior analyst
+
+Walk-In / Last-Minute Attendance:
+- Walk-in attendance is available at the Full Retail Rate, subject to seat availability
+
+===============================================================
+15. CODE OF CONDUCT
+===============================================================
+
+All attendees, speakers, and sponsors are required to adhere to the CISOevents Code of Conduct.
+
+Core Requirements:
+- Respectful, professional behavior throughout all event activities (sessions, networking, online interactions)
+- No harassment, discrimination, or aggressive sales tactics
+- Vendor participants must respect the practitioner-first environment
+- Recordings of off-record sessions are prohibited without consent
+
+Enforcement:
+CISOevents reserves the right to remove any individual from the event or reject any sponsor who violates the Code of Conduct, without refund.
+
+Full Code of Conduct: https://cisoevents.com/coc
+
+===============================================================
+16. FORCE MAJEURE POLICY
+===============================================================
+
+CISOevents includes a Force Majeure clause in all agreements (sponsorship and ticket terms).
+
+In the event of cancellation or postponement due to:
+- Fire, flood, or natural disaster
+- Acts of government or regulatory agencies
+- Health and safety concerns (including COVID-related changes or public health emergencies)
+- Any other cause beyond our commercially reasonable control
+
+CISOevents and Neptune Media LLC are held harmless from legal and financial liability beyond the fees already paid at time of cancellation.
+
+CISOevents will make every effort to:
+1. Notify all registered attendees and sponsors promptly
+2. Reschedule the affected event when feasible
+3. Communicate rescheduled dates via email and website
+
+===============================================================
+17. PRIVACY POLICY SUMMARY
+===============================================================
+
+Full Privacy Policy: https://cisoevents.com/privacy
+Last Updated: March 2, 2026
+
+No personal data is collected or stored by CISOevents.com:
+- No name, email, or phone stored on our servers
+- No IP address logging
+- No tracking cookies or behavioral analytics
+- No advertising networks or retargeting scripts
+- No payment information collected
+
+Contact Form:
+When you use the Contact Us form, your message is forwarded directly to our team via Resend's transactional email service. It is NOT stored in any database.
+
+Event Registration (Luma):
+All registrations are processed by Luma Events (lu.ma). Personal data submitted during registration is governed by Luma's Privacy Policy (https://lu.ma/privacy). CISOevents does NOT receive or have access to your registration or payment information.
+
+Local Storage Cache:
+Our website may cache public event data (event titles, dates, locations) in your browser's localStorage for performance. This contains no personal information and auto-clears every 10 minutes.
+
+Embedded YouTube Videos:
+Videos from our @horizonsummit channel are embedded on the site. When you play them, Google LLC's privacy policy applies.
+
+Children's Privacy:
+Our platform is for business professionals only. We do not knowingly collect information from individuals under 18.
+
+Security:
+All data transmissions are encrypted via HTTPS/TLS.
+
+===============================================================
+18. CONTACT & SUPPORT
+===============================================================
+
+Primary Contact:
+Email:           charlesp@cisoevents.com
+Phone:           +1 (321) 236-2561
+Schedule a Call: https://calendly.com/cisoevents
+Contact Page:    https://cisoevents.com/contact
+
+Business Hours:
+Monday-Friday, 9:00 AM - 5:00 PM Eastern Time
+
+Response Times:
+- General inquiries: within 2 business days
+- Sponsorship inquiries: within 1 business day
+- Speaker applications: within 2 business days
+- Feedback/complaints: within 2 business days
+
+Mailing Address:
+Neptune Media LLC
+Wyoming 82801, USA
+
+Contacts by Inquiry Type:
+- General questions:      charlesp@cisoevents.com
+- Registration issues:    Contact Luma directly at lu.ma/help
+- Speaking opportunities: charlesp@cisoevents.com
+- Sponsorship inquiries:  charlesp@cisoevents.com or +1 (321) 236-2561
+- Press & media:          charlesp@cisoevents.com
+- Feedback & complaints:  charlesp@cisoevents.com
+- Privacy concerns:       charlesp@cisoevents.com
+
+===============================================================
+19. SOCIAL MEDIA & LINKS
+===============================================================
+
+LinkedIn:  https://www.linkedin.com/company/cisoevents
+X/Twitter: https://x.com/cisoevents
+YouTube:   https://www.youtube.com/@horizonsummit
+TikTok:    https://www.tiktok.com/@cisoevents
+Facebook:  https://www.facebook.com/cisoevents
+Instagram: https://www.instagram.com/cisoevents
+WhatsApp:  https://call.whatsapp.com/voice/raAu2mPWQE8pJp9BS00HZl
+
+Stay Updated:
+Follow @cisoevents on LinkedIn, X (Twitter), and Instagram, or subscribe to the live event calendar on the Events page. Register on Luma to receive notifications for new event announcements.
+
+===============================================================
+20. FAQ - FULL Q&A
+===============================================================
+
+--- ABOUT CISOEVENTS ---
 
 Q: What is CISOevents?
-A: CISOevents is a community-first platform that produces executive summits, roundtables, and virtual briefings exclusively for Chief Information Security Officers (CISOs) and senior security leaders across North America. Our events are peer-led, vendor-neutral, and designed for candid conversation — not sales pitches. CISOevents is operated by Neptune Media LLC, a Wyoming-based media and events company.
+A: CISOevents is a premier event series connecting cybersecurity and AI leaders - CISOs, CIOs, investors, and startup founders - through curated summits, dinners, and networking events worldwide.
 
-Q: Who runs CISOevents?
-A: CISOevents is operated by Neptune Media LLC. You can reach the team at charlesp@cisoevents.com or call +1 (321) 236-2561.
+Q: Who attends CISOevents?
+A: Our attendees are senior cybersecurity professionals including CISOs, Deputy CISOs, VPs of Security, CTOs, and other senior security and technology leaders. We also welcome a curated selection of cybersecurity investors, startup founders, and adjacent executives.
 
-Q: What is the Horizon Summit?
-A: The Horizon Summit is our annual flagship conference — a full-day executive summit bringing together 500+ security leaders for keynotes, panels, roundtables, and a networking dinner. It is produced by CISOevents and Neptune Media LLC.
+Q: Where are events held?
+A: CISOevents are held in major cities across North America and beyond - including New York, San Francisco, and other major cities. Past events have been held at notable venues such as the AWS Builder Loft in San Francisco. Each event listing on Luma shows the exact venue and address.
 
-Q: Is CISOevents vendor-neutral?
-A: Yes. CISOevents does not endorse any sponsor's products or services. Sponsors gain brand visibility, but all event content remains peer-led and vendor-neutral. We do not allow product demos or sales presentations on stage.
+Q: How is CISOevents different from other security conferences?
+A: CISOevents is peer-led and practitioner-only. Sessions are candid, off-record by default, and free from vendor sales pressure. We keep groups small and curated to ensure real conversation - not marketing theater.
 
-Q: What types of events does CISOevents produce?
-A: We produce three formats:
-1. Horizon Summit — Annual flagship full-day conference for 150–250 CISOs and security leaders, with keynotes, panels, roundtables, and a networking dinner.
-2. Roundtables — Invite-only intimate sessions of 15–25 leaders exploring a focused topic over lunch or dinner. No slides, no demos.
-3. Virtual Briefings — Short-form virtual sessions on emerging threats, regulatory shifts, and strategic decisions.
+Q: How do I subscribe to calendar updates?
+A: Subscribe via the iCal / Google Calendar button on the Events page. It auto-updates whenever new events are added.
 
-Q: Where are CISOevents held?
-A: Our events are held across major cities in North America. The upcoming Horizon Summit is in San Francisco, CA. The series is expanding with gatherings also planned in Toronto and London.
+Q: Can I attend virtually?
+A: Selected events offer virtual attendance or live streams. Each event listing will indicate whether a virtual option is available. Keynote recordings are typically published on YouTube after the event.
 
-Q: What is the website for CISOevents?
-A: https://cisoevents.com
-
-
-----------------------------------------------------------------
-CATEGORY: REGISTRATION & TICKETS
-----------------------------------------------------------------
+--- REGISTRATION & TICKETS ---
 
 Q: How do I register for an event?
-A: There are three ways to register:
-1. Online — Visit cisoevents.com/events, find your event, and click "Register Now" (powered by Luma).
-2. Email — Send your name, title, company, and desired event to charlesp@cisoevents.com.
-3. Phone — Call +1 (321) 236-2561 during business hours.
+A: Click "Register Now" on any event listing. You'll be redirected to Luma - our official registration platform - to complete sign-up.
 
-Q: Can I register at the door?
-A: Yes, walk-in registrations are accepted at the Full Retail Rate. We recommend registering in advance to secure your spot and take advantage of early pricing.
+Q: How much do tickets cost?
+A: Pricing varies per event. Some events are free with approval; others are paid. Check the specific event listing on Luma for accurate pricing.
 
-Q: What is included with a VIP Pass?
-A: The VIP Pass includes access to all sessions, lunch, and the evening networking dinner.
+Q: What does VIP include?
+A: VIP tickets include lunch and dinner in addition to full access to all sessions and networking activities.
 
-Q: What is included with a Standard Pass?
-A: The Standard Pass includes access to all sessions. Meal inclusions vary by event — check the specific event registration page for details.
+Q: Are tickets refundable?
+A: All ticket sales are non-refundable. Transfers are permitted at least 5 days before the event to a replacement of equal or greater seniority.
 
-Q: Is there a virtual attendance option?
-A: Virtual Passes are available for select events. They include live stream access and access to recorded sessions after the event. Check the individual event page for availability.
+Q: Can I walk in without registering?
+A: Walk-in attendance is available at the Full Retail Rate, subject to seat availability.
 
-Q: What is your cancellation and refund policy?
-A: All CISOevents passes are non-refundable once purchased. If you cannot attend, you may transfer your registration to a colleague of equal or greater seniority (CISO-level or equivalent) by notifying us at least 5 business days before the event. Email charlesp@cisoevents.com with your order details and the replacement attendee's name, title, company, and email. CISOevents reserves the right to approve or decline substitution requests.
-
-Q: Can I transfer my ticket to someone else?
-A: Yes, ticket transfers are allowed to a colleague of equal or greater seniority (CISO-level or equivalent). Contact charlesp@cisoevents.com at least 5 business days before the event with the replacement attendee's details.
-
-Q: How do I add the event to my calendar?
-A: On the event page on our website, you will find "Add to Calendar" options for Google Calendar, Outlook, Apple Calendar, and downloadable .ics file.
-
-Q: Are there special events or evening functions?
-A: Yes, select events include an evening networking dinner. The VIP Pass includes this. For special event tickets sold separately, they are subject to the same non-refundable policy as all other passes.
-
-
-----------------------------------------------------------------
-CATEGORY: SPEAKERS & CONTENT
-----------------------------------------------------------------
+--- SPEAKERS & CONTENT ---
 
 Q: How do I apply to speak at a CISOevents event?
-A: We welcome applications from active security practitioners — CISOs, Deputy CISOs, VPs of Security, and senior security leaders. We do not accept vendor-led presentations or product demos. To apply, email charlesp@cisoevents.com with: your name, title, and company; a 2–3 sentence bio; your proposed topic and a short abstract; and any past speaking experience. Our team reviews all submissions within 5–7 business days.
+A: Email charlesp@cisoevents.com with your name, title, company, topic idea, and a brief bio. Our team reviews all applications.
 
-Q: Will sessions be recorded?
-A: Recording policies vary by event. Some sessions are recorded and made available to registered attendees after the event. Check the specific event page or contact charlesp@cisoevents.com for details.
+Q: Who qualifies as a speaker?
+A: Active practitioners only - CISOs, Deputy CISOs, VPs of Security, or equivalent senior roles. Vendor representatives may not present.
 
-Q: Are past event recordings available?
-A: Select past recordings are available on our YouTube channel (@horizonsummit). Visit cisoevents.com/gallery for the video gallery.
+Q: Are events recorded?
+A: Many events are recorded. Highlights, keynote footage, and panel recordings are published on our YouTube channel and in the Gallery section of the website.
 
-Q: Are the discussions on the record?
-A: Discussions at CISOevents roundtables are off the record by default. Summit sessions may vary — check the event agenda for recording policies.
+Q: Where can I find past event recordings?
+A: Visit the Gallery at cisoevents.com/gallery, or the YouTube channel at youtube.com/@horizonsummit.
 
+--- SPONSORSHIP & PARTNERS ---
 
-----------------------------------------------------------------
-CATEGORY: SPONSORSHIP & PARTNERS
-----------------------------------------------------------------
+Q: How can my company sponsor a CISOevents event?
+A: Email charlesp@cisoevents.com or call +1 (321) 236-2561 to request the sponsorship deck. We offer tailored packages for cybersecurity vendors, VCs, and enterprise brands.
 
-Q: How do I become a sponsor?
-A: CISOevents offers several sponsorship tiers for cybersecurity vendors and service providers. To inquire, email charlesp@cisoevents.com with subject line: "Sponsorship Inquiry – [Event Name]". Our team will send you a sponsorship prospectus.
+Q: What sponsorship tiers are available?
+A: We offer custom packages from logo placement and exhibit tables, to speaking slots, roundtable hosting, and exclusive dinner sponsorships. Contact us for the full sponsorship deck.
 
-Q: What does sponsorship include?
-A: Sponsorship includes brand visibility at the event (signage, materials, digital), logo placement on event website and communications, and access to the attendee networking environment. Select tiers include speaking or panel opportunities. Note: CISOevents does not endorse sponsor products. Content remains vendor-neutral.
+Q: When is the deadline for sponsor logos and materials?
+A: At least 30 days before the event. Vector format (AI, EPS, SVG) preferred; high-res PNG accepted. Logos submitted after the deadline appear on website and social media only - not in printed or on-screen event graphics.
 
-Q: What are the sponsorship tiers?
-A: We offer Platinum, Gold, and Silver tiers. Each tier provides different levels of visibility, inclusions, and networking access. Contact charlesp@cisoevents.com for the current prospectus with pricing.
+Q: Can our startup participate in a pitch session?
+A: Yes. Certain events include startup showcase segments and investor pitch opportunities. These are curated by application. Email us with your startup information to be considered.
 
-Q: When is the logo submission deadline for sponsors?
-A: Sponsor logos must be submitted in vector format (SVG or EPS) at least 30 days before the event date. Late submissions may not be included in printed materials.
+Q: Does CISOevents endorse its sponsors?
+A: No. Use of a sponsor's name or logo in event materials does not constitute endorsement by CISOevents. CISOevents is a non-exclusive platform.
 
-Q: Does CISOevents endorse sponsor products?
-A: No. CISOevents does not endorse any vendor's products or services. The Sponsorship Terms & Conditions explicitly state that sponsorship does not constitute an endorsement.
+--- TERMS & POLICIES ---
 
-Q: Is there a startup or pitch opportunity?
-A: Select events include a startup spotlight or pitch segment. Contact charlesp@cisoevents.com for availability at your desired event.
+Q: Where can I find the Sponsorship Terms and Conditions?
+A: Full terms are provided in your Sponsorship Agreement upon signing. Key terms include: trademark usage, production timeline, logo deadlines, payment terms (Net 15 ACH/wire), non-exclusivity, and force majeure. Email charlesp@cisoevents.com to request a copy.
 
+Q: What is the payment policy for sponsorships?
+A: Preferred payment is ACH or wire transfer. Net 15 terms available for Accounts Payable. Credit cards accepted with processing fees. Full payment required at least 75 days before the event.
 
-----------------------------------------------------------------
-CATEGORY: PAYMENT POLICY
-----------------------------------------------------------------
+Q: What is the Code of Conduct?
+A: All attendees, speakers, and sponsors must adhere to respectful, professional behavior throughout all event activities. Full Code of Conduct: cisoevents.com/coc. Violations may result in removal without refund.
 
-Q: What payment methods are accepted?
-A: CISOevents accepts:
-- ACH / Wire Transfer — Preferred method, Net 15 payment terms.
-- Check — Accepted with prior approval.
-- Credit Card — Available as a last resort; a processing fee may apply.
+Q: What happens if an event is cancelled due to circumstances beyond your control?
+A: CISOevents' Force Majeure clause covers cancellations due to natural disaster, government action, health/safety concerns, or other causes beyond our control. CISOevents and Neptune Media LLC are held harmless beyond fees already paid. We will notify attendees and reschedule when feasible.
 
-Q: When is full payment due?
-A: For sponsorships and group registrations, full payment is required no later than 75 days before the event date.
+Q: Does CISOevents store my personal data?
+A: No. CISOevents.com does not collect or store personal data. Event registrations are handled by Luma. Our website only caches public event data in your browser's localStorage (auto-clears every 10 minutes). See cisoevents.com/privacy.
 
-Q: What are the payment terms?
-A: Standard payment terms are Net 15 for ACH/wire transfers. Invoices are issued upon registration or sponsorship confirmation.
-
-Q: Where can I find the full Terms and Conditions?
-A: The full Sponsorship Terms & Conditions are available at cisoevents.com. You can also request a copy by emailing charlesp@cisoevents.com.
-
-
-----------------------------------------------------------------
-CATEGORY: CODE OF CONDUCT & POLICIES
-----------------------------------------------------------------
-
-Q: Does CISOevents have a Code of Conduct?
-A: Yes. All attendees, speakers, sponsors, and staff are expected to adhere to the CISOevents Code of Conduct. It is available at cisoevents.com/coc. Violations may result in removal from the event without refund.
-
-Q: What is your Force Majeure policy?
-A: CISOevents includes a Force Majeure clause in all agreements. In the event of cancellation due to fire, flood, natural disaster, acts of government, health and safety concerns (including COVID-related changes), or other causes beyond our commercially reasonable control, CISOevents and Neptune Media LLC are held harmless from legal and financial liability beyond the fee already paid. We will make every effort to notify attendees and reschedule affected events.
-
-Q: What is your privacy policy?
-A: CISOevents collects name, email, phone, company, and event participation data to process registrations and send event communications. We do not sell your data to third parties. Full details at cisoevents.com/privacy.
-
-
-----------------------------------------------------------------
-CATEGORY: CONTACT & SUPPORT
-----------------------------------------------------------------
+--- CONTACT & GENERAL ---
 
 Q: How do I contact CISOevents?
-A: Email: charlesp@cisoevents.com | Phone: +1 (321) 236-2561 | Contact form: cisoevents.com/#contact
+A: Email charlesp@cisoevents.com or call +1 (321) 236-2561. You can also use the contact form at cisoevents.com/contact.
 
-Q: Who should I contact for registration help?
-A: Email charlesp@cisoevents.com with your name, event, and order details. We typically respond within 1–2 business days.
+Q: How do I stay updated on new events?
+A: Follow @cisoevents on LinkedIn, X (Twitter), and Instagram. Subscribe to the calendar on the Events page. Register on Luma for notification of new event announcements.
 
-Q: Who should I contact for sponsorship inquiries?
-A: Email charlesp@cisoevents.com with subject line: "Sponsorship Inquiry – [Event Name]"
+Q: I have feedback or a complaint - who do I contact?
+A: Email charlesp@cisoevents.com. We aim to respond within 2 business days.
 
-Q: Who should I contact for speaking applications?
-A: Email charlesp@cisoevents.com with subject line: "Speaking Application – [Event Name]"
+===============================================================
+21. QUICK REFERENCE
+===============================================================
 
-Q: Who should I contact for press or media inquiries?
-A: Email charlesp@cisoevents.com with subject line: "Press Inquiry"
-
-Q: What are your business hours?
-A: Our team is available Monday–Friday, 9am–5pm Eastern Time. We aim to respond to all inquiries within 1–2 business days.
-
-Q: Where is Neptune Media LLC located?
-A: Neptune Media LLC is based in Wyoming 82801, USA.
-
-
-----------------------------------------------------------------
-QUICK REFERENCE — KEY FACTS
-----------------------------------------------------------------
-
-Organization:     CISOevents (operated by Neptune Media LLC)
-Email:            charlesp@cisoevents.com
+Primary Email:    charlesp@cisoevents.com
 Phone:            +1 (321) 236-2561
 Website:          https://cisoevents.com
-Events page:      https://cisoevents.com/events
-Luma calendar:    https://lu.ma/cisoevents
-YouTube:          https://youtube.com/@horizonsummit
-Code of Conduct:  https://cisoevents.com/coc
+Event Calendar:   https://lu.ma/cisoevents
+YouTube:          https://www.youtube.com/@horizonsummit
+Schedule a Call:  https://calendly.com/cisoevents
+LinkedIn:         https://www.linkedin.com/company/cisoevents
+X / Twitter:      https://x.com/cisoevents
+Instagram:        https://www.instagram.com/cisoevents
+TikTok:           https://www.tiktok.com/@cisoevents
+Facebook:         https://www.facebook.com/cisoevents
+WhatsApp:         https://call.whatsapp.com/voice/raAu2mPWQE8pJp9BS00HZl
 Privacy Policy:   https://cisoevents.com/privacy
-Next Event:       CISOevents — March 23, 2026 — San Francisco, CA
+Code of Conduct:  https://cisoevents.com/coc
+Gallery:          https://cisoevents.com/gallery
+Podcasts:         https://cisoevents.com/podcasts
+FAQ:              https://cisoevents.com/faq
+Business Hours:   Mon-Fri, 9am-5pm Eastern
+Response Time:    Within 2 business days
+Operated by:      Neptune Media LLC, Wyoming 82801, USA
+Luma Privacy:     https://lu.ma/privacy
 
-Ticket policy:    Non-refundable. Transfers allowed 5+ days before event.
-Payment:          ACH/Wire preferred, Net 15. Full payment 75 days before event.
-Logo deadline:    30 days before event, vector format (SVG or EPS).
-
-================================================================
-END OF KNOWLEDGE BASE FILE
-================================================================
+===============================================================
+Document compiled from cisoevents.com, Luma calendar, and YouTube channel.
+For chatbot training and internal reference use.
+(c) 2026 CISOevents. A Neptune Media Company.
+===============================================================

@@ -1,19 +1,24 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, PhoneCall, CalendarDays } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 import logo from '../assets/CISOevents-Logo-R2.png';
+import { useApp } from '../context/AppContext';
 
 const navLinks = [
-  { label: 'Events',   to: '/events' },
   { label: 'About',    to: '/about' },
+  { label: 'Events',   to: '/events' },
   { label: 'Gallery',  to: '/gallery' },
-  { label: 'Contact',  to: '/#contact' },
+  // TODO: re-enable once YOUTUBE_API_KEY is set on Vercel
+  // { label: 'Podcasts', to: '/podcasts' },
+  { label: 'Contact',  to: '/contact' },
 ];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const { openCalendly } = useApp();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -38,9 +43,9 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'shadow-lg' : 'shadow-sm'}`}
       style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.98)',
+        backgroundColor: 'var(--color-nav-bg)',
         backdropFilter: 'blur(12px)',
-        borderBottom: '1px solid rgba(0,0,0,0.08)',
+        borderBottom: `1px solid var(--color-border)`
       }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -48,7 +53,7 @@ export default function Navbar() {
 
           {/* Logo — colorful, no filter */}
           <Link to="/" className="flex items-center">
-            <img src={logo} alt="CISOevents" className="h-9 w-auto" />
+            <img src={logo} alt="CISOevents" className="h-9 w-auto logo-themed" />
           </Link>
 
           {/* Desktop nav links */}
@@ -58,7 +63,10 @@ export default function Navbar() {
                 <button
                   key={link.label}
                   onClick={() => handleAnchorClick(link.to)}
-                  className="px-4 py-2 font-medium text-sm rounded-lg transition-colors text-[#1F2D3C] hover:text-blue-600 hover:bg-blue-50"
+                  className="px-4 py-2 font-medium text-sm rounded-lg transition-colors"
+                  style={{ color: 'var(--color-heading)' }}
+                  onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-accent)'; e.currentTarget.style.backgroundColor = 'var(--color-hover-10)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-heading)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
                 >
                   {link.label}
                 </button>
@@ -66,13 +74,12 @@ export default function Navbar() {
                 <NavLink
                   key={link.label}
                   to={link.to}
-                  className={({ isActive }) =>
-                    `px-4 py-2 font-medium text-sm rounded-lg transition-colors ${
-                      isActive
-                        ? 'text-blue-600 bg-blue-50'
-                        : 'text-[#1F2D3C] hover:text-blue-600 hover:bg-blue-50'
-                    }`
-                  }
+                  className="px-4 py-2 font-medium text-sm rounded-lg transition-colors"
+                  style={({ isActive }) => isActive
+                    ? { color: 'var(--color-accent)', backgroundColor: 'var(--color-accent-10)' }
+                    : { color: 'var(--color-heading)' }}
+                  onMouseEnter={e => { const target = e.currentTarget as HTMLAnchorElement; if (!(target as any)._active) { target.style.color = 'var(--color-accent)'; target.style.backgroundColor = 'var(--color-hover-10)'; } }}
+                  onMouseLeave={e => { const target = e.currentTarget as HTMLAnchorElement; if (!(target as any)._active) { target.style.color = 'var(--color-heading)'; target.style.backgroundColor = 'transparent'; } }}
                 >
                   {link.label}
                 </NavLink>
@@ -82,9 +89,33 @@ export default function Navbar() {
 
           {/* Desktop right CTAs */}
           <div className="hidden md:flex items-center gap-2">
+            <ThemeToggle />
+            {/* Book Call — opens Calendly modal */}
+            <button
+              type="button"
+              onClick={openCalendly}
+              className="text-sm font-semibold px-4 py-2 rounded-lg border transition-all inline-flex items-center gap-2"
+              style={{
+                borderColor: 'var(--color-border)',
+                color: 'var(--color-heading)',
+                backgroundColor: 'var(--color-surface)'
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.backgroundColor = 'var(--color-hover-10)';
+                e.currentTarget.style.borderColor = 'var(--color-accent)';
+                e.currentTarget.style.color = 'var(--color-accent)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.backgroundColor = 'var(--color-surface)';
+                e.currentTarget.style.borderColor = 'var(--color-border)';
+                e.currentTarget.style.color = 'var(--color-heading)';
+              }}
+            >
+              <PhoneCall size={16} /> Book a Call
+            </button>
             {/* Luma Register Button */}
             <button
-              className="luma-checkout--button text-white font-semibold text-sm px-5 py-2 rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+              className="luma-checkout--button text-white font-semibold text-sm px-5 py-2 rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg inline-flex items-center gap-2"
               type="button"
               data-luma-action="checkout"
               data-luma-event-id="iuutm274"
@@ -92,14 +123,15 @@ export default function Navbar() {
               onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'var(--color-accent-hover)'}
               onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'var(--color-accent)'}
             >
-              Register Now
+              <CalendarDays size={16} /> Register
             </button>
           </div>
 
           {/* Mobile burger */}
           <button
             onClick={() => setOpen(!open)}
-            className="md:hidden p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+            className="md:hidden p-2 rounded-lg transition-colors"
+            style={{ color: 'var(--color-heading)' }}
           >
             {open ? <X size={22} /> : <Menu size={22} />}
           </button>
@@ -109,7 +141,7 @@ export default function Navbar() {
       {/* Mobile menu */}
       <div
         className={`md:hidden transition-all duration-300 overflow-hidden ${open ? 'max-h-[480px]' : 'max-h-0'}`}
-        style={{ backgroundColor: 'rgba(255,255,255,0.98)', borderTop: '1px solid rgba(0,0,0,0.06)' }}
+        style={{ backgroundColor: 'var(--color-nav-bg)', borderTop: '1px solid var(--color-border)' }}
       >
         <div className="px-4 pb-5 pt-2 flex flex-col gap-1">
           {navLinks.map(link => (
@@ -117,7 +149,10 @@ export default function Navbar() {
               <button
                 key={link.label}
                 onClick={() => { handleAnchorClick(link.to); setOpen(false); }}
-                className="px-4 py-3 rounded-lg text-sm font-medium text-left text-[#1F2D3C] hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                className="px-4 py-3 rounded-lg text-sm font-medium text-left transition-colors"
+                style={{ color: 'var(--color-heading)' }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'var(--color-hover-10)'; e.currentTarget.style.color = 'var(--color-accent)'; }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = 'var(--color-heading)'; }}
               >
                 {link.label}
               </button>
@@ -125,24 +160,37 @@ export default function Navbar() {
               <NavLink
                 key={link.label}
                 to={link.to}
-                className={({ isActive }) =>
-                  `px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                    isActive ? 'text-blue-600 bg-blue-50' : 'text-[#1F2D3C] hover:bg-gray-50'
-                  }`
-                }
+                className="px-4 py-3 rounded-lg text-sm font-medium transition-colors"
+                style={({ isActive }) => isActive
+                  ? { color: 'var(--color-accent)', backgroundColor: 'var(--color-accent-10)' }
+                  : { color: 'var(--color-heading)' }}
               >
                 {link.label}
               </NavLink>
             )
           ))}
+          <div className="flex items-center gap-2 px-1">
+            <ThemeToggle />
+          </div>
           <button
-            className="luma-checkout--button w-full mt-1 text-white font-semibold px-6 py-3 rounded-lg text-center text-sm transition-all"
+            type="button"
+            onClick={() => { openCalendly(); setOpen(false); }}
+            className="w-full text-sm font-semibold px-4 py-3 rounded-lg border text-center transition-colors inline-flex justify-center items-center gap-2"
+            style={{
+              borderColor: 'var(--color-border)',
+              color: 'var(--color-heading)',
+            }}
+          >
+            <PhoneCall size={16} /> Book a Call
+          </button>
+          <button
+            className="luma-checkout--button w-full mt-1 text-white font-semibold px-6 py-3 rounded-lg text-center text-sm transition-all inline-flex justify-center items-center gap-2"
             type="button"
             data-luma-action="checkout"
             data-luma-event-id="iuutm274"
             style={{ backgroundColor: 'var(--color-accent)' }}
           >
-            Register Now
+            <CalendarDays size={16} /> Register
           </button>
         </div>
       </div>

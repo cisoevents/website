@@ -50,12 +50,20 @@ export default function Events() {
     <div className="min-h-screen" style={{ backgroundColor: 'var(--color-bg)' }}>
 
       {/* Page Header */}
-      <div className="pt-28 pb-16 px-4" style={{ backgroundColor: 'var(--color-bg-alt)' }}>
+      <div
+        className="pt-28 pb-16 px-4"
+        style={{
+          backgroundImage:
+            'linear-gradient(135deg, var(--page-hero-c1) 0%, var(--page-hero-c2) 55%, var(--page-hero-c3) 100%), url(https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1600&q=80)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
         <div className="max-w-7xl mx-auto">
           <p className="font-semibold text-sm uppercase tracking-widest mb-2" style={{ color: 'var(--color-accent)' }}>Explore</p>
           <h1 className="text-4xl md:text-5xl font-black mb-3" style={{ color: 'var(--color-heading)' }}>All Events</h1>
           <p className="text-lg" style={{ color: 'var(--color-text-muted)' }}>
-            World-class cybersecurity gatherings � live and on-demand.
+            World-class cybersecurity gatherings — live and on-demand.
           </p>
         </div>
       </div>

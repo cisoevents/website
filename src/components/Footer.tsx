@@ -119,7 +119,7 @@ export default function Footer() {
                 { label: 'Upcoming Events', to: '/events' },
                 { label: 'Past Events',     to: '/events?tab=past' },
                 { label: 'Gallery',         to: '/gallery' },
-                { label: 'Podcasts',        to: '/#podcasts' },
+                { label: 'Podcasts',        to: '/podcasts' },
                 { label: 'FAQs',            to: '/faq' },
               ].map(link => (
                 <li key={link.label}>
@@ -181,6 +181,17 @@ export default function Footer() {
             <Link to="/faq" className="text-gray-500 hover:text-gray-300 text-xs transition-colors">FAQ</Link>
             <a href="mailto:charlesp@cisoevents.com" className="text-gray-500 hover:text-gray-300 text-xs transition-colors">Contact</a>
           </div>
+          <p className="text-[11px] text-gray-500">
+            Powered by{' '}
+            <a
+              href="https://bluesproutagency.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-300 hover:text-white underline transition-colors"
+            >
+              Blue Sprout Agency
+            </a>
+          </p>
         </div>
       </div>
     </footer>

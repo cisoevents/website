@@ -13,6 +13,9 @@ interface AppContextValue {
   adminUser: AdminUser | null;
   login: (username: string, password: string) => boolean;
   logout: () => void;
+  calendlyOpen: boolean;
+  openCalendly: () => void;
+  closeCalendly: () => void;
 }
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -21,6 +24,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [events, setEvents] = useState<CisoEvent[]>(initialEvents as CisoEvent[]);
   const [toasts, setToasts] = useState<AppToast[]>([]);
   const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
+  const [calendlyOpen, setCalendlyOpen] = useState(false);
+
+  const openCalendly = () => setCalendlyOpen(true);
+  const closeCalendly = () => setCalendlyOpen(false);
 
   const addToast = (message: string, type: AppToast['type'] = 'success') => {
     const id = Date.now();
@@ -63,6 +70,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       events, addEvent, updateEvent, deleteEvent,
       toasts, addToast, removeToast,
       adminUser, login, logout,
+      calendlyOpen, openCalendly, closeCalendly,
     }}>
       {children}
     </AppContext.Provider>
