@@ -88,7 +88,7 @@ export default function Footer() {
 
           <div className="lg:col-span-2">
             <div className="mb-4">
-              <img src={logo} alt="CISOevents" className="h-7 w-auto brightness-0 invert" />
+              <img src={logo} alt="CISOevents" className="h-7 w-auto logo-themed" />
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-sm">
               The premier platform connecting cybersecurity and AI leaders through world-class events, podcasts, and community.
@@ -102,9 +102,10 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center transition-colors duration-200"
-                  onMouseEnter={e => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
-                  onMouseLeave={e => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'}
+                  className="w-9 h-9 rounded-lg flex items-center justify-center transition-colors duration-200"
+                  style={{ backgroundColor: 'var(--footer-icon-bg)', color: 'var(--footer-icon-color)' }}
+                  onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'var(--color-accent)'; e.currentTarget.style.color = '#fff'; }}
+                  onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'var(--footer-icon-bg)'; e.currentTarget.style.color = 'var(--footer-icon-color)'; }}
                 >
                   <Icon size={16} />
                 </a>

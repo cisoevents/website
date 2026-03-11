@@ -20,6 +20,9 @@ backend/.env
 backend/.env.production
 backend/.env.local
 
+# Private docs — keep local only
+docs/SSH_SETUP_NEW_LAPTOP.md
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

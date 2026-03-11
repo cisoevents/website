@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AppProvider, useApp } from './context/AppContext';
 
@@ -32,7 +32,7 @@ import {
 } from './pages/admin/AdminSimple';
 
 // Public layout wrapper (Navbar + Footer)
-function PublicLayout({ children }) {
+function PublicLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <Navbar />
@@ -43,7 +43,7 @@ function PublicLayout({ children }) {
 }
 
 // Guard for admin routes
-function RequireAuth({ children }) {
+function RequireAuth({ children }: { children: ReactNode }) {
   const { adminUser } = useApp();
   if (!adminUser) return <Navigate to="/admin" replace />;
   return children;
