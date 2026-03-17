@@ -1,5 +1,5 @@
-import { useEffect, type ReactNode } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { type ReactNode } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider, useApp } from './context/AppContext';
 
 // Layout
@@ -7,6 +7,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Toast from './components/Toast';
 import CalendlyModal from './components/CalendlyModal';
+import RegisterModal from './components/RegisterModal';
 
 // Public pages
 import Home from './pages/Home';
@@ -49,21 +50,9 @@ function RequireAuth({ children }: { children: ReactNode }) {
   return children;
 }
 
-function LumaInit() {
-  const location = useLocation();
-  useEffect(() => {
-    // Re-initialize Luma checkout buttons after every React navigation
-    if (window.luma) {
-      window.luma.initCheckout();
-    }
-  }, [location.pathname]);
-  return null;
-}
-
 function AppRoutes() {
   return (
     <>
-      <LumaInit />
       <Routes>
       {/* Public */}
       <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
@@ -101,6 +90,7 @@ export default function App() {
         <AppRoutes />
         <Toast />
         <CalendlyModal />
+        <RegisterModal />
       </AppProvider>
     </BrowserRouter>
   );

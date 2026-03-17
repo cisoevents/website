@@ -2,6 +2,9 @@ import { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Calendar, MapPin, Users, Filter, Search, ExternalLink, RefreshCw } from 'lucide-react';
 import { useLumaEvents } from '../hooks/useLumaEvents';
+import { useAwsEvents } from '../hooks/useAwsEvents';
+import { useApp } from '../context/AppContext';
+import { AWS_MODAL_MARKER } from '../data/awsEvents';
 import {
   getEventImage,
   getEventLocation,
@@ -16,9 +19,26 @@ import {
 } from '../services/lumaService';
 
 export default function Events() {
-  const { events, loading, error, refresh } = useLumaEvents();
+  const { openRegister } = useApp();
+  const { events: lumaEvents, loading: lumaLoading, error, refresh } = useLumaEvents();
+  const { events: awsEvents, loading: awsLoading } = useAwsEvents();
+
+  // Merge AWS + Luma events, AWS first (upcoming events on top)
+  const events = useMemo(() => {
+    const seen = new Set<string>();
+    const merged = [...awsEvents, ...lumaEvents].filter(e => {
+      if (seen.has(e.api_id)) return false;
+      seen.add(e.api_id);
+      return true;
+    });
+    return merged;
+  }, [awsEvents, lumaEvents]);
+
+  const loading = lumaLoading || awsLoading;
+
   const [searchParams] = useSearchParams();
-  const initialTab = (searchParams.get('tab') ?? 'all') as 'all' | 'upcoming' | 'past';
+  // Default to 'upcoming' so clicking Events in the navbar shows upcoming events
+  const initialTab = (searchParams.get('tab') ?? 'upcoming') as 'all' | 'upcoming' | 'past';
 
   const [statusFilter, setStatusFilter] = useState<'all' | 'upcoming' | 'past'>(initialTab);
   const [trackFilter,  setTrackFilter]  = useState<'all' | EventTrack>('all');
@@ -84,6 +104,7 @@ export default function Events() {
             <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--color-text-dim)' }} />
             <input
               type="text"
+              aria-label="Search events or location"
               placeholder="Search events or location�"
               value={search}
               onChange={e => setSearch(e.target.value)}
@@ -165,7 +186,7 @@ export default function Events() {
             </span>
             <button
               onClick={refresh}
-              title="Refresh events from Luma"
+              title="Refresh events"
               className="p-1.5 rounded-lg transition-colors"
               style={{ color: 'var(--color-text-dim)' }}
               onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'}
@@ -299,18 +320,31 @@ export default function Events() {
                       </div>
                     )}
 
-                    <a
-                      href={lumaUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-1.5 w-full text-white font-semibold text-sm py-2.5 rounded-lg transition-all duration-200"
-                      style={{ backgroundColor: upcoming ? 'var(--color-accent)' : 'var(--color-surface)', border: upcoming ? 'none' : '1px solid var(--color-border)', color: upcoming ? '#fff' : 'var(--color-text-muted)' }}
-                      onMouseEnter={e => { e.currentTarget.style.backgroundColor = upcoming ? 'var(--color-accent-hover)' : 'var(--color-dark-bg)'; }}
-                      onMouseLeave={e => { e.currentTarget.style.backgroundColor = upcoming ? 'var(--color-accent)' : 'var(--color-surface)'; }}
-                    >
-                      {upcoming ? 'Register on Luma' : 'View Recap'}
-                      <ExternalLink size={13} />
-                    </a>
+                    {ev.url === AWS_MODAL_MARKER ? (
+                      <button
+                        type="button"
+                        onClick={openRegister}
+                        className="flex items-center justify-center gap-1.5 w-full text-white font-semibold text-sm py-2.5 rounded-lg transition-all duration-200"
+                        style={{ backgroundColor: 'var(--color-accent)' }}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = 'var(--color-accent-hover)'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
+                      >
+                        Register Now
+                      </button>
+                    ) : (
+                      <a
+                        href={lumaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-1.5 w-full text-white font-semibold text-sm py-2.5 rounded-lg transition-all duration-200"
+                        style={{ backgroundColor: upcoming ? 'var(--color-accent)' : 'var(--color-surface)', border: upcoming ? 'none' : '1px solid var(--color-border)', color: upcoming ? '#fff' : 'var(--color-text-muted)' }}
+                        onMouseEnter={e => { e.currentTarget.style.backgroundColor = upcoming ? 'var(--color-accent-hover)' : 'var(--color-dark-bg)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = upcoming ? 'var(--color-accent)' : 'var(--color-surface)'; }}
+                      >
+                        {upcoming ? 'Register on Luma' : 'View Recap'}
+                        <ExternalLink size={13} />
+                      </a>
+                    )}
                   </div>
                 </div>
               );

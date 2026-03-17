@@ -15,6 +15,9 @@ export default function SpeakerModal({ speaker, onClose }: SpeakerModalProps) {
       onClick={onClose}
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${speaker.name} — Speaker Bio`}
         className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden animate-slide-up"
         onClick={e => e.stopPropagation()}
       >
@@ -38,9 +41,10 @@ export default function SpeakerModal({ speaker, onClose }: SpeakerModalProps) {
           </div>
           <button
             onClick={onClose}
+            aria-label="Close"
             className="shrink-0 p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors mt-0.5"
           >
-            <X size={18} />
+            <X size={18} aria-hidden="true" />
           </button>
         </div>
 

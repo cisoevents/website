@@ -372,6 +372,7 @@ export default function FAQ() {
           <div className="mt-8 max-w-md mx-auto relative">
             <input
               type="text"
+              aria-label="Search frequently asked questions"
               placeholder="Search questions..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}

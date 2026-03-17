@@ -18,8 +18,8 @@ export default function Toast() {
             : <CheckCircle size={20} className="shrink-0" />
           }
           <span className="flex-1 text-sm font-medium">{toast.message}</span>
-          <button onClick={() => removeToast(toast.id)} className="shrink-0 hover:opacity-70 transition-opacity">
-            <X size={16} />
+          <button onClick={() => removeToast(toast.id)} aria-label="Dismiss notification" className="shrink-0 hover:opacity-70 transition-opacity">
+            <X size={16} aria-hidden="true" />
           </button>
         </div>
       ))}

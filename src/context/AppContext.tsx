@@ -16,6 +16,9 @@ interface AppContextValue {
   calendlyOpen: boolean;
   openCalendly: () => void;
   closeCalendly: () => void;
+  registerOpen: boolean;
+  openRegister: () => void;
+  closeRegister: () => void;
 }
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -25,9 +28,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<AppToast[]>([]);
   const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
   const [calendlyOpen, setCalendlyOpen] = useState(false);
+  const [registerOpen, setRegisterOpen] = useState(false);
 
   const openCalendly = () => setCalendlyOpen(true);
   const closeCalendly = () => setCalendlyOpen(false);
+  const openRegister = () => setRegisterOpen(true);
+  const closeRegister = () => setRegisterOpen(false);
 
   const addToast = (message: string, type: AppToast['type'] = 'success') => {
     const id = Date.now();
@@ -71,6 +77,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       toasts, addToast, removeToast,
       adminUser, login, logout,
       calendlyOpen, openCalendly, closeCalendly,
+      registerOpen, openRegister, closeRegister,
     }}>
       {children}
     </AppContext.Provider>

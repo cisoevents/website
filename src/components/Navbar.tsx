@@ -18,7 +18,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
-  const { openCalendly } = useApp();
+  const { openCalendly, openRegister } = useApp();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -53,7 +53,7 @@ export default function Navbar() {
 
           {/* Logo — colorful, no filter */}
           <Link to="/" className="flex items-center">
-            <img src={logo} alt="CISOevents" className="h-9 w-auto logo-themed" />
+            <img src={logo} alt="CISOevents" className="h-9 w-auto logo-themed" width="3523" height="600" />
           </Link>
 
           {/* Desktop nav links */}
@@ -113,12 +113,11 @@ export default function Navbar() {
             >
               <PhoneCall size={16} /> Book a Call
             </button>
-            {/* Luma Register Button */}
+            {/* Register Button — opens AWS Events Builder modal */}
             <button
-              className="luma-checkout--button text-white font-semibold text-sm px-5 py-2 rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg inline-flex items-center gap-2"
               type="button"
-              data-luma-action="checkout"
-              data-luma-event-id="iuutm274"
+              onClick={openRegister}
+              className="text-white font-semibold text-sm px-5 py-2 rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg inline-flex items-center gap-2"
               style={{ backgroundColor: 'var(--color-accent)' }}
               onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'var(--color-accent-hover)'}
               onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'var(--color-accent)'}
@@ -130,16 +129,20 @@ export default function Navbar() {
           {/* Mobile burger */}
           <button
             onClick={() => setOpen(!open)}
+            aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
             className="md:hidden p-2 rounded-lg transition-colors"
             style={{ color: 'var(--color-heading)' }}
           >
-            {open ? <X size={22} /> : <Menu size={22} />}
+            {open ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
           </button>
         </div>
       </div>
 
       {/* Mobile menu */}
       <div
+        id="mobile-menu"
         className={`md:hidden transition-all duration-300 overflow-hidden ${open ? 'max-h-[480px]' : 'max-h-0'}`}
         style={{ backgroundColor: 'var(--color-nav-bg)', borderTop: '1px solid var(--color-border)' }}
       >
@@ -183,11 +186,11 @@ export default function Navbar() {
           >
             <PhoneCall size={16} /> Book a Call
           </button>
+          {/* Register Button — opens AWS Events Builder modal */}
           <button
-            className="luma-checkout--button w-full mt-1 text-white font-semibold px-6 py-3 rounded-lg text-center text-sm transition-all inline-flex justify-center items-center gap-2"
             type="button"
-            data-luma-action="checkout"
-            data-luma-event-id="iuutm274"
+            onClick={() => { openRegister(); setOpen(false); }}
+            className="w-full mt-1 text-white font-semibold px-6 py-3 rounded-lg text-center text-sm transition-all inline-flex justify-center items-center gap-2"
             style={{ backgroundColor: 'var(--color-accent)' }}
           >
             <CalendarDays size={16} /> Register

@@ -88,7 +88,7 @@ export default function Footer() {
 
           <div className="lg:col-span-2">
             <div className="mb-4">
-              <img src={logo} alt="CISOevents" className="h-7 w-auto logo-themed" />
+              <img src={logo} alt="CISOevents" className="h-7 w-auto logo-themed" width="3523" height="600" />
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-6 max-w-sm">
               The premier platform connecting cybersecurity and AI leaders through world-class events, podcasts, and community.

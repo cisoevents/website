@@ -1,26 +1,62 @@
-﻿import { Link } from 'react-router-dom';
+﻿import { useMemo, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import heroBg from '../assets/bg_hero_image.jpeg';
 import heroVideo from '../assets/BG_HERO_2_SUMMIT_2.mp4';
 import {
-  Calendar, MapPin, Users, Mic, Award, ChevronRight,
-  Play, ArrowRight, Star, Shield, ExternalLink,
+  Calendar, MapPin, Users, Mic, Award,
+  ArrowRight, Star, Shield,
 } from 'lucide-react';
 import { stats } from '../data/mockData';
-
-const API_BASE = (import.meta.env.VITE_API_URL as string | undefined)?.trim() || 'https://backend-website-mu.vercel.app';
 import { useLumaEvents } from '../hooks/useLumaEvents';
+import { useAwsEvents } from '../hooks/useAwsEvents';
+import { AWS_MODAL_MARKER } from '../data/awsEvents';
+import { useApp } from '../context/AppContext';
 import {
   getEventImage,
   getEventLocation,
   formatEventDateRange,
   getLumaEventUrl,
+  isUpcoming,
   getEventTrack,
   TRACK_LABELS,
   TRACK_COLORS,
 } from '../services/lumaService';
 
 // â”€â”€â”€ Hero â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// Small helper so Hero can call openRegister from context
+function HeroRegisterButton() {
+  const { openRegister } = useApp();
+  return (
+    <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 items-start sm:items-center">
+      <button
+        type="button"
+        onClick={openRegister}
+        className="w-full sm:w-auto flex items-center justify-center gap-2 text-white font-semibold text-base px-8 py-3.5 rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl"
+        style={{ backgroundColor: 'var(--color-accent)' }}
+        onMouseEnter={e => e.currentTarget.style.backgroundColor = 'var(--color-accent-hover)'}
+        onMouseLeave={e => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
+      >
+        Register for Event <ArrowRight size={18} />
+      </button>
+    </div>
+  );
+}
+
 function Hero() {
+  // Inject a <link rel="preload"> for the poster image so it is fetched at
+  // high priority — makes the LCP element render before the video downloads.
+  useEffect(() => {
+    const existing = document.querySelector('link[data-hero-poster]');
+    if (existing) return;
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = heroBg;
+    link.setAttribute('fetchpriority', 'high');
+    link.setAttribute('data-hero-poster', '1');
+    document.head.appendChild(link);
+  }, []);
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden" style={{ backgroundColor: 'var(--color-bg)' }}>
       {/* Video background */}
@@ -32,6 +68,8 @@ function Hero() {
         muted
         loop
         playsInline
+        preload="none"
+        aria-hidden="true"
       />
       {/* Dark overlay so text stays readable */}
       <div className="absolute inset-0" style={{ backgroundColor: 'var(--hero-overlay)' }} />
@@ -69,20 +107,7 @@ function Hero() {
             <span>San Francisco, CA</span>
           </div>
 
-          <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 items-start sm:items-center">
-            {/* Luma Register Button */}
-            <button
-              className="luma-checkout--button w-full sm:w-auto flex items-center justify-center gap-2 text-white font-semibold text-base px-8 py-3.5 rounded-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl"
-              type="button"
-              data-luma-action="checkout"
-              data-luma-event-id="iuutm274"
-              style={{ backgroundColor: 'var(--color-accent)' }}
-              onMouseEnter={e => e.currentTarget.style.backgroundColor = 'var(--color-accent-hover)'}
-              onMouseLeave={e => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
-            >
-              Register for Event <ArrowRight size={18} />
-            </button>
-          </div>
+          <HeroRegisterButton />
         </div>
       </div>
 
@@ -206,8 +231,18 @@ function AboutSection() {
 
 // â”€â”€â”€ Upcoming Events â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function UpcomingEvents() {
-  const { upcoming, loading, error } = useLumaEvents();
-  const show = upcoming.slice(0, 3);
+  const { openRegister } = useApp();
+  const { upcoming: lumaUpcoming, loading: lumaLoading, error } = useLumaEvents();
+  const { events: awsEvents, loading: awsLoading } = useAwsEvents();
+
+  const loading = lumaLoading || awsLoading;
+
+  // Merge AWS upcoming events (already date-filtered by backend) with Luma upcoming,
+  // AWS events first so the RSA 2026 event appears at top.
+  const show = useMemo(() => {
+    const awsUpcoming = awsEvents.filter(isUpcoming);
+    return [...awsUpcoming, ...lumaUpcoming].slice(0, 3);
+  }, [awsEvents, lumaUpcoming]);
 
   return (
     <section id="upcoming-events" className="py-20" style={{ backgroundColor: 'var(--color-bg)' }}>
@@ -300,17 +335,30 @@ function UpcomingEvents() {
                         <span>{ev.hosts.map(h => h.name).join(', ')}</span>
                       </div>
                     )}
-                    <a
-                      href={lumaUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-1.5 w-full text-white font-semibold text-sm py-2.5 rounded-lg transition-all duration-200"
-                      style={{ backgroundColor: 'var(--color-accent)' }}
-                      onMouseEnter={e => e.currentTarget.style.backgroundColor = 'var(--color-accent-hover)'}
-                      onMouseLeave={e => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
-                    >
-                      Register on Luma <ExternalLink size={13} />
-                    </a>
+                    {ev.url === AWS_MODAL_MARKER ? (
+                      <button
+                        type="button"
+                        onClick={openRegister}
+                        className="flex items-center justify-center gap-1.5 w-full text-white font-semibold text-sm py-2.5 rounded-lg transition-all duration-200"
+                        style={{ backgroundColor: 'var(--color-accent)' }}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = 'var(--color-accent-hover)'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
+                      >
+                        Register Now
+                      </button>
+                    ) : (
+                      <a
+                        href={lumaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-1.5 w-full text-white font-semibold text-sm py-2.5 rounded-lg transition-all duration-200"
+                        style={{ backgroundColor: 'var(--color-accent)' }}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = 'var(--color-accent-hover)'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
+                      >
+                        Register on Luma
+                      </a>
+                    )}
                   </div>
                 </div>
               );

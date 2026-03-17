@@ -840,6 +840,134 @@ app.get('/api/youtube/playlist/:id', async (req: Request, res: Response) => {
   }
 });
 
+// ── AWS Events Builder scraper ─────────────────────────────────────────────────
+// Reads a comma-separated list of event URLs from AWS_EVENT_URLS env var.
+// Falls back to the hardcoded RSA 2026 event.
+const AWS_EVENT_URLS: string[] = (process.env.AWS_EVENT_URLS ?? '')
+  .split(',').map(u => u.trim()).filter(Boolean);
+const DEFAULT_AWS_EVENT_URLS = AWS_EVENT_URLS.length > 0
+  ? AWS_EVENT_URLS
+  : ['https://events.builder.aws.com/event/768a0f09-c528-4b97-8e16-21aa32ec533d'];
+
+interface AwsJsonLdEvent {
+  '@type'?: string;
+  name?: string;
+  startDate?: string;
+  endDate?: string;
+  description?: string;
+  image?: string | { url?: string };
+  location?: {
+    name?: string;
+    address?: {
+      streetAddress?: string;
+      addressLocality?: string;
+      addressRegion?: string;
+      postalCode?: string;
+    };
+  };
+  organizer?: { name?: string } | Array<{ name?: string }>;
+}
+
+async function scrapeAwsEventPage(url: string): Promise<LumaEventEntry | null> {
+  const res = await fetch(url, {
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36',
+      'Accept': 'text/html,application/xhtml+xml',
+      'Accept-Language': 'en-US,en;q=0.9',
+    },
+  });
+  if (!res.ok) return null;
+
+  const html = await res.text();
+
+  // Extract JSON-LD schemas — look for @type: Event
+  let eventData: AwsJsonLdEvent | null = null;
+  const jsonLdRe = /<script[^>]+type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g;
+  let m: RegExpExecArray | null;
+  while ((m = jsonLdRe.exec(html)) !== null) {
+    try {
+      const parsed = JSON.parse(m[1]);
+      const schemas: AwsJsonLdEvent[] = Array.isArray(parsed) ? parsed : [parsed];
+      const ev = schemas.find(s => s['@type'] === 'Event');
+      if (ev) { eventData = ev; break; }
+    } catch { /* malformed JSON — skip */ }
+  }
+
+  if (!eventData) return null;
+
+  let startDate = eventData.startDate ? new Date(eventData.startDate) : null;
+  if (!startDate || isNaN(startDate.getTime())) return null;
+
+  // Cvent JSON-LD often emits midnight UTC (e.g. "Tue Mar 24 00:00:00 UTC 2026").
+  // Midnight UTC = March 23 at 4 PM PST, so the scraper would store "March 24"
+  // while the real calendar date is March 23. Fix: shift midnight-UTC dates to
+  // noon UTC so they render as the same calendar date in any timezone (UTC-12 to UTC+12).
+  if (startDate.getUTCHours() === 0 && startDate.getUTCMinutes() === 0 && startDate.getUTCSeconds() === 0) {
+    startDate = new Date(startDate.getTime() - 12 * 60 * 60 * 1000); // UTC midnight → noon-12h = previous day noon
+  }
+
+  // endDate is rarely in JSON-LD for Cvent pages — default start + 4 h
+  const endDate = eventData.endDate
+    ? new Date(eventData.endDate)
+    : new Date(startDate.getTime() + 4 * 60 * 60 * 1000);
+
+  const loc  = eventData.location;
+  const addr = loc?.address;
+  const cityState = [addr?.addressLocality, addr?.addressRegion].filter(Boolean).join(', ');
+  const fullAddress = [loc?.name, addr?.streetAddress, cityState].filter(Boolean).join(', ');
+
+  const cover = typeof eventData.image === 'string'
+    ? eventData.image
+    : (eventData.image as { url?: string } | undefined)?.url;
+
+  const organizerRaw = eventData.organizer;
+  const organizerName = Array.isArray(organizerRaw)
+    ? organizerRaw[0]?.name
+    : organizerRaw?.name;
+
+  const idMatch = url.match(/\/event\/([a-f0-9-]{8,})/i);
+  const eventId  = idMatch ? idMatch[1] : url;
+
+  return {
+    api_id:        `aws-${eventId}`,
+    name:          eventData.name ?? 'CISOevents Event',
+    description:   eventData.description,
+    start_at:      startDate.toISOString(),
+    end_at:        endDate.toISOString(),
+    url,                    // full URL — getLumaEventUrl() already handles http:// prefix
+    cover_url:     cover,
+    location_type: 'offline',
+    geo_address_json: {
+      city:         addr?.addressLocality,
+      country:      'US',
+      full_address: fullAddress || undefined,
+    },
+    hosts: organizerName ? [{ name: organizerName }] : [{ name: 'CISOevents' }],
+  };
+}
+
+// GET /api/aws/events — scrape all configured AWS event pages, return upcoming only
+app.get('/api/aws/events', async (_req: Request, res: Response) => {
+  const CACHE_KEY = 'aws:events:upcoming';
+  const cached = cacheGet<LumaEventEntry[]>(CACHE_KEY);
+  if (cached) { res.json({ ok: true, events: cached, source: 'cache' }); return; }
+
+  try {
+    const results = await Promise.all(DEFAULT_AWS_EVENT_URLS.map(scrapeAwsEventPage));
+    const all = results.filter((e): e is LumaEventEntry => e !== null);
+
+    // Filter to upcoming (end_at > now) — same logic as frontend isUpcoming()
+    const now = Date.now();
+    const upcoming = all.filter(e => new Date(e.end_at ?? e.start_at).getTime() > now);
+
+    cacheSet(CACHE_KEY, upcoming, 60 * 60_000); // 1-hour cache
+    res.json({ ok: true, events: upcoming, total: upcoming.length, source: 'scrape' });
+  } catch (err) {
+    console.error('[AWS events error]', err);
+    res.status(502).json({ ok: false, error: String(err) });
+  }
+});
+
 // ── Health check ──────────────────────────────────────────────────────────────
 app.get('/api/health', (_req: Request, res: Response) => {
   res.json({ status: 'ok' });

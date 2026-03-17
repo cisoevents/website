@@ -40,6 +40,7 @@ export default function Speakers() {
               type="text"
               value={search}
               onChange={e => setSearch(e.target.value)}
+              aria-label="Search speakers by name, title, or company"
               placeholder="Search speakers by name, title, company..."
               className="form-input pl-9 py-2 text-sm"
             />
