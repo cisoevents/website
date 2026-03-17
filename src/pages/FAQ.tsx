@@ -272,7 +272,7 @@ const categories: Category[] = [
       },
       {
         q: 'How do I stay updated on new events?',
-        a: 'Follow us on LinkedIn, X (Twitter), and Instagram @cisoevents, or subscribe to our calendar on the Events page. You can also register on Luma to receive notifications for new event announcements.',
+        a: 'Follow us on LinkedIn, X (Twitter), and Instagram @cisoevents, or subscribe to our calendar on the Events page. You can also Register to receive notifications for new event announcements.',
       },
       {
         q: 'I have feedback or a complaint â€” who do I contact?',

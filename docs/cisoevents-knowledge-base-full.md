@@ -557,7 +557,7 @@ Wyoming 82801, USA
 | WhatsApp Group | https://call.whatsapp.com/voice/raAu2mPWQE8pJp9BS00HZl |
 
 **Stay Updated:**  
-Follow @cisoevents on LinkedIn, X (Twitter), and Instagram, or subscribe to the live event calendar on the Events page. Register on Luma to receive notifications for new event announcements.
+Follow @cisoevents on LinkedIn, X (Twitter), and Instagram, or subscribe to the live event calendar on the Events page. Register to receive notifications for new event announcements.
 
 ---
 
@@ -664,7 +664,7 @@ A: No. CISOevents.com does not collect or store personal data. Event registratio
 A: Email charlesp@cisoevents.com or call +1 (321) 236-2561. You can also use the contact form at cisoevents.com/contact.
 
 **Q: How do I stay updated on new events?**  
-A: Follow @cisoevents on LinkedIn, X (Twitter), and Instagram. Subscribe to the calendar on the Events page. Register on Luma for notification of new event announcements.
+A: Follow @cisoevents on LinkedIn, X (Twitter), and Instagram. Subscribe to the calendar on the Events page. Register for notification of new event announcements.
 
 **Q: I have feedback or a complaint — who do I contact?**  
 A: Email charlesp@cisoevents.com. We aim to respond within 2 business days.

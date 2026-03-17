@@ -9,13 +9,11 @@ import {
 import { stats } from '../data/mockData';
 import { useLumaEvents } from '../hooks/useLumaEvents';
 import { useAwsEvents } from '../hooks/useAwsEvents';
-import { AWS_MODAL_MARKER } from '../data/awsEvents';
 import { useApp } from '../context/AppContext';
 import {
   getEventImage,
   getEventLocation,
   formatEventDateRange,
-  getLumaEventUrl,
   isUpcoming,
   getEventTrack,
   TRACK_LABELS,
@@ -294,7 +292,6 @@ function UpcomingEvents() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
             {show.map(ev => {
               const location = getEventLocation(ev);
-              const lumaUrl  = getLumaEventUrl(ev);
               return (
                 <div key={ev.api_id} className="card overflow-hidden group">
                   <div className="relative overflow-hidden h-48">
@@ -335,30 +332,16 @@ function UpcomingEvents() {
                         <span>{ev.hosts.map(h => h.name).join(', ')}</span>
                       </div>
                     )}
-                    {ev.url === AWS_MODAL_MARKER ? (
-                      <button
-                        type="button"
-                        onClick={openRegister}
-                        className="flex items-center justify-center gap-1.5 w-full text-white font-semibold text-sm py-2.5 rounded-lg transition-all duration-200"
-                        style={{ backgroundColor: 'var(--color-accent)' }}
-                        onMouseEnter={e => e.currentTarget.style.backgroundColor = 'var(--color-accent-hover)'}
-                        onMouseLeave={e => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
-                      >
-                        Register Now
-                      </button>
-                    ) : (
-                      <a
-                        href={lumaUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-1.5 w-full text-white font-semibold text-sm py-2.5 rounded-lg transition-all duration-200"
-                        style={{ backgroundColor: 'var(--color-accent)' }}
-                        onMouseEnter={e => e.currentTarget.style.backgroundColor = 'var(--color-accent-hover)'}
-                        onMouseLeave={e => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
-                      >
-                        Register on Luma
-                      </a>
-                    )}
+                    <button
+                      type="button"
+                      onClick={openRegister}
+                      className="flex items-center justify-center gap-1.5 w-full text-white font-semibold text-sm py-2.5 rounded-lg transition-all duration-200"
+                      style={{ backgroundColor: 'var(--color-accent)' }}
+                      onMouseEnter={e => e.currentTarget.style.backgroundColor = 'var(--color-accent-hover)'}
+                      onMouseLeave={e => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
+                    >
+                      Register
+                    </button>
                   </div>
                 </div>
               );

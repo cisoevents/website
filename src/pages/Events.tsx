@@ -320,7 +320,7 @@ export default function Events() {
                       </div>
                     )}
 
-                    {ev.url === AWS_MODAL_MARKER ? (
+                    {ev.url === AWS_MODAL_MARKER || upcoming ? (
                       <button
                         type="button"
                         onClick={openRegister}
@@ -329,7 +329,7 @@ export default function Events() {
                         onMouseEnter={e => e.currentTarget.style.backgroundColor = 'var(--color-accent-hover)'}
                         onMouseLeave={e => e.currentTarget.style.backgroundColor = 'var(--color-accent)'}
                       >
-                        Register Now
+                        Register
                       </button>
                     ) : (
                       <a
@@ -337,11 +337,11 @@ export default function Events() {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center justify-center gap-1.5 w-full text-white font-semibold text-sm py-2.5 rounded-lg transition-all duration-200"
-                        style={{ backgroundColor: upcoming ? 'var(--color-accent)' : 'var(--color-surface)', border: upcoming ? 'none' : '1px solid var(--color-border)', color: upcoming ? '#fff' : 'var(--color-text-muted)' }}
-                        onMouseEnter={e => { e.currentTarget.style.backgroundColor = upcoming ? 'var(--color-accent-hover)' : 'var(--color-dark-bg)'; }}
-                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = upcoming ? 'var(--color-accent)' : 'var(--color-surface)'; }}
+                        style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)', color: 'var(--color-text-muted)' }}
+                        onMouseEnter={e => { e.currentTarget.style.backgroundColor = 'var(--color-dark-bg)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.backgroundColor = 'var(--color-surface)'; }}
                       >
-                        {upcoming ? 'Register on Luma' : 'View Recap'}
+                        View Recap
                         <ExternalLink size={13} />
                       </a>
                     )}
