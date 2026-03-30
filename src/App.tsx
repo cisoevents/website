@@ -1,6 +1,7 @@
 import { type ReactNode } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppProvider, useApp } from './context/AppContext';
+import { Analytics } from '@vercel/analytics/react';
 
 // Layout
 import Navbar from './components/Navbar';
@@ -104,6 +105,7 @@ export default function App() {
         <Toast />
         <CalendlyModal />
         <RegisterModal />
+        <Analytics />
       </AppProvider>
     </BrowserRouter>
   );
