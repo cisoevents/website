@@ -36,6 +36,19 @@ import {
 function PublicLayout({ children }: { children: ReactNode }) {
   return (
     <>
+      <div style={{
+        backgroundColor: '#dc2626',
+        color: '#fff',
+        textAlign: 'center',
+        padding: '8px 16px',
+        fontSize: '14px',
+        fontWeight: 600,
+        letterSpacing: '0.02em',
+        position: 'relative',
+        zIndex: 9999,
+      }}>
+        This site is currently under construction. Please contact admin for more information.
+      </div>
       <Navbar />
       <main>{children}</main>
       <Footer />

@@ -370,10 +370,10 @@ function UpcomingEvents() {
 export default function Home() {
   return (
     <>
-      <Hero />
-      <StatsBar />
-      <AboutSection />
-      <UpcomingEvents />
+      {/* <Hero /> */}
+      {/* <StatsBar /> */}
+      {/* <AboutSection /> */}
+      {/* <UpcomingEvents /> */}
     </>
   );
 }
